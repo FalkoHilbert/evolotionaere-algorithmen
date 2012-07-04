@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelSalesman", "TravelSalesman\TravelSalesman.csproj", "{82876DE8-2FCB-4E26-B8EC-DC890CE25DB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemOfEquations", "SystemOfEquations\SystemOfEquations.csproj", "{5F15C01F-5C64-49BB-A871-94BE89D95013}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82876DE8-2FCB-4E26-B8EC-DC890CE25DB4}.Debug|x86.ActiveCfg = Debug|x86
+		{82876DE8-2FCB-4E26-B8EC-DC890CE25DB4}.Debug|x86.Build.0 = Debug|x86
+		{82876DE8-2FCB-4E26-B8EC-DC890CE25DB4}.Release|x86.ActiveCfg = Release|x86
+		{82876DE8-2FCB-4E26-B8EC-DC890CE25DB4}.Release|x86.Build.0 = Release|x86
+		{5F15C01F-5C64-49BB-A871-94BE89D95013}.Debug|x86.ActiveCfg = Debug|x86
+		{5F15C01F-5C64-49BB-A871-94BE89D95013}.Debug|x86.Build.0 = Debug|x86
+		{5F15C01F-5C64-49BB-A871-94BE89D95013}.Release|x86.ActiveCfg = Release|x86
+		{5F15C01F-5C64-49BB-A871-94BE89D95013}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
