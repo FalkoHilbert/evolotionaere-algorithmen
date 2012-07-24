@@ -94,8 +94,15 @@ namespace SystemOfEquations
                 while (Elterngeneration.Count < elternSize)
                 {
                     Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, interval, funktionCount));
+                    /*
+                     * Wie kommt das mit dem Distinct zustande ?
+                     * Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ?
+                     * Welche voraussetzungen müssen erfüllt sein ?
+                     */
                     Elterngeneration = Elterngeneration.Distinct(new TierchenComparer()).ToList();
                 }
+                // tier spiegelt den Inhalt welcher Variable in der Tierchen.Elterngeneration wieder?
+                // oder ist das nur ein Platzhalter/Objekt für ein Element der Liste?
                 foreach (var tier in Elterngeneration)
                 {
                     Console.WriteLine("Tier: {0} | Wert:\t{1}", tier.ToString(), tier.Wert.ToString("####0.#####"));
@@ -112,6 +119,7 @@ namespace SystemOfEquations
 
 
                     Kindgeneration = new List<Tierchen>();
+                    // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
 
                     while (Kindgeneration.Count() < countOfRecombinations)
                     {
@@ -139,6 +147,8 @@ namespace SystemOfEquations
                         else kind = Elterngeneration[index1].Mutation();
 
                         Kindgeneration.Add(kind);
+
+                        //Vermutlich ein Filter, dass es keine Duplikate gibt?
                         Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
                     }
                     Elterngeneration.Clear();

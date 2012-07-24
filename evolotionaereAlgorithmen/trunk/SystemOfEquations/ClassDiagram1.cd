@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="SystemOfEquations.Allel">
-    <Position X="10.25" Y="3.25" Width="3.25" />
+    <Position X="12" Y="3" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAQgAUAAMBAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Allel.cs</FileName>
@@ -11,7 +11,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="SystemOfEquations.Interval">
-    <Position X="10" Y="0.5" Width="2" />
+    <Position X="7.75" Y="0.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AIAAAAACAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interval.cs</FileName>
@@ -24,14 +24,14 @@
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
+      <Field Name="Elterngeneration" />
       <Field Name="Kindgeneration" />
       <Field Name="TierchenHistory" />
-      <Field Name="Elterngeneration" />
       <Field Name="interval" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="SystemOfEquations.Tierchen">
-    <Position X="5.25" Y="3" Width="3.5" />
+    <Position X="6.5" Y="3" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAIAAAEAAAGAAQAoAAAAAAAAAAAAgAAAACAAAU=</HashCode>
       <FileName>Tierchen.cs</FileName>
@@ -41,12 +41,12 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="SystemOfEquations.TierchenComparer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="14.5" Y="0.5" Width="1.5" />
+    <Position X="11.5" Y="0.75" Width="3.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>TierchenComparer.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.32" Collapsed="true" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

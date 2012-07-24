@@ -86,6 +86,12 @@ namespace SystemOfEquations
 
         public static bool OnePointRecombination(Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2)
         {
+            /* Ein-Punkt-Rekombination wählt zwei Tierchen sowie zufällig je ein Allel ihres Gens.
+             * Kinder setzen sich aus einem Teil der Mutter/Vater sowie einem Teil des Vaters zusammen.
+             * Übergeben den Kindern zunächst den vollständigen Gencode und Entferne anschließend
+             * an einer zufälligen Stelle den übergebliebenen Code, füge anschließend einen anderen Code
+             * (des Vaters/Mutter) in das gleiche Tierchen ein.
+             */
             kind1 = null;
             kind2 = null;
             if (mutter.GenCode.Count() == vater.GenCode.Count() 
@@ -96,7 +102,8 @@ namespace SystemOfEquations
                 // wähle Zahl z
                 Random randomizer = new Random();
 
-
+                // Gib eine Folge von eindeutigen (unsortierten?) Allelen des jew. Tierchens aus
+                // mehrere Allele in einem Tierchen sind möglich - müssen aber extra berücksichtigt werden
                 var AllelSizeMutter = mutter.GenCode.Select(allel => allel.Size).Distinct();
                 var AllelSizeVater = mutter.GenCode.Select(allel => allel.Size).Distinct();
                 if (AllelSizeMutter.Count() == 1 && AllelSizeVater.Count() == 1 )
