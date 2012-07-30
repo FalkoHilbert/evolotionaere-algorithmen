@@ -9,6 +9,15 @@ namespace SystemOfEquations
     {
         public int start;
         public int end;
+
+        public Interval(){}
+
+        public Interval(int inStart, int inEnd)
+        {
+            // TODO: Complete member initialization
+            this.start = inStart;
+            this.end = inEnd;
+        }
         public static bool TryParse(string text, out Interval interval)
         {
             interval = null;
