@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace SystemOfEquations
 {
@@ -32,11 +33,58 @@ namespace SystemOfEquations
                 interval = new List<Interval>();
 
                 bool couldParsed = false;
-                while (!couldParsed)
+                bool loadDocument = false;
+                int gene = 0;
+
+                // es wurde keine Initial Generation übergeben
+                if ( (args.Length > 0) )
                 {
-                    Console.WriteLine("Größe der Elterngeneration?");
-                    string lenght = Console.ReadLine();
-                    couldParsed = Int32.TryParse(lenght, out elternSize);
+                    Console.WriteLine("Soll das übergebenene Dokument geladen werden? (y/n)");
+                    string answer = Console.ReadLine();
+                    if (answer == "y")
+                    {
+                        loadDocument = true;
+                        try
+                        {
+                            // Elterngeneration einladen
+                            XDocument doc = XDocument.Load(args[0]);
+                            Elterngeneration =
+                                // lade alle "tier"-Elemente 
+                                doc.Root.Descendants("tier").Select(tier =>
+                                    // erzeuge für jedes ein Tierchen Object
+                                    new Tierchen(
+                                        // lade innerhalb des "tier"-Elementes alle "gen"-Elemente
+                                        tier.Descendants("gen").Select(gen =>
+                                            // erzeuge für jedes ein Allel
+                                            new Allel(
+                                                // lade innerhalb des "gen"-Elementes alle "allel"-Elemente
+                                                gen.Descendants("allel").Select(allel => 
+                                                    // parse den bool-Wert
+                                                    bool.Parse(allel.Value)).ToList(),
+                                                // Interval steht als Attribut innerhalb des "gen"-Elementes
+                                                new Interval(
+                                                    int.Parse(gen.Attribute("interval_start").Value),
+                                                    int.Parse(gen.Attribute("interval_end").Value))
+                                            )
+                                        ).ToList()
+                                    )
+                                ).ToList();
+                            elternSize = Elterngeneration.Count();
+                            Console.WriteLine("gelesene Größe der Elterngeneration:");
+                            Console.WriteLine(elternSize);
+                        }
+                        catch (Exception) { loadDocument = false; }
+                        
+                    }
+                }
+                if (!loadDocument)
+                {
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Größe der Elterngeneration?");
+                        string lenght = Console.ReadLine();
+                        couldParsed = Int32.TryParse(lenght, out elternSize);
+                    }
                 }
                 couldParsed = false;
                 while (!couldParsed)
@@ -47,31 +95,39 @@ namespace SystemOfEquations
                     couldParsed = couldParsed ? countOfRecombinations < elternSize : false;
                 }
                 couldParsed = false;
-                while (!couldParsed)
+                if (!loadDocument)
                 {
-                    Console.WriteLine("Länge des Binärstrings?");
-                    string lenght = Console.ReadLine();
-                    couldParsed = Int32.TryParse(lenght, out binärStringLenght);
-                }
-                couldParsed = false;
-                int gene = 0;
-                while (!couldParsed)
-                {
-                    Console.WriteLine("Anzahl der Gene?");
-                    string lenght = Console.ReadLine();
-                    couldParsed = Int32.TryParse(lenght, out gene);
-                }
-                couldParsed = false;
-                while (!couldParsed )
-                {
-                    Console.WriteLine("Größe des {0}. Intervals?", (interval.Count()+1));
-                    string lenght = Console.ReadLine();
-                    Interval actInterval;
-                    couldParsed = Interval.TryParse(lenght, out actInterval);
-                    if (couldParsed)
+                    while (!couldParsed)
                     {
-                        interval.Add(actInterval);
-                        couldParsed = (interval.Count() >= gene);
+                        Console.WriteLine("Länge des Binärstrings?");
+                        string lenght = Console.ReadLine();
+                        couldParsed = Int32.TryParse(lenght, out binärStringLenght);
+                    }
+                }
+                couldParsed = false;
+                if (!loadDocument)
+                {
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Anzahl der Gene?");
+                        string lenght = Console.ReadLine();
+                        couldParsed = Int32.TryParse(lenght, out gene);
+                    }
+                }
+                couldParsed = false;
+                if (!loadDocument)
+                {
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Größe des {0}. Intervals?", (interval.Count() + 1));
+                        string lenght = Console.ReadLine();
+                        Interval actInterval;
+                        couldParsed = Interval.TryParse(lenght, out actInterval);
+                        if (couldParsed)
+                        {
+                            interval.Add(actInterval);
+                            couldParsed = (interval.Count() >= gene);
+                        }
                     }
                 }
                 couldParsed = false;
@@ -87,19 +143,62 @@ namespace SystemOfEquations
                     Console.WriteLine("Generationen die erzeugt werden sollen?");
                     string lenght = Console.ReadLine();
                     couldParsed = Int32.TryParse(lenght, out countOfGenerations);
-                }
-
-                Elterngeneration = new List<Tierchen>();
-                // erzeuge Elterngeneration
-                while (Elterngeneration.Count < elternSize)
+                }                
+                // es wurde keine Initial Generation übergeben
+                if (!loadDocument)
                 {
-                    Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, interval, funktionCount));
-                    /*
-                     * Wie kommt das mit dem Distinct zustande ?
-                     * Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ?
-                     * Welche voraussetzungen müssen erfüllt sein ?
-                     */
-                    Elterngeneration = Elterngeneration.Distinct(new TierchenComparer()).ToList();
+                    Elterngeneration = new List<Tierchen>();
+                    // erzeuge Elterngeneration
+                    while (Elterngeneration.Count < elternSize)
+                    {
+                        Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, interval, funktionCount));
+                        /*
+                         * Wie kommt das mit dem Distinct zustande ?
+                         * Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ?
+                         * Welche voraussetzungen müssen erfüllt sein ?
+                         */
+                        Elterngeneration = Elterngeneration.Distinct(new TierchenComparer()).ToList();
+                    }
+                    try
+                    {
+                        // Elterngeneration im Programm Verzeichnis unter dem Namen "last.xml" speichern
+                        // xml-Dokument erzeugen
+                        XDocument doc = new XDocument(
+                            // erzeuge des Wurzelelement "generation"
+                            new XElement("generation",
+                                // für jedes tier in der Generation
+                                Elterngeneration.Select(tier =>
+                                    // erzeuge "tier"-Element
+                                    new XElement("tier",
+                                        // für jedes gen im tierchen
+                                        tier.GenCode.Select(gen =>
+                                            // erzeuge "gen"-Element
+                                            new XElement("gen",
+                                                // füge "interval_start"-Attribut hinzu
+                                                new XAttribute("interval_start",
+                                                    gen.Interval.start
+                                                ),
+                                                // füge "interval_end"-Attribut hinzu
+                                                new XAttribute("interval_end",
+                                                    gen.Interval.end
+                                                ),
+                                                // für jedes allel (Bit) im Gen
+                                                gen.BinärCode.Select(allel =>
+                                                    // speichere bool'schen Wert 
+                                                    new XElement("allel",
+                                                        allel.ToString()
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        );
+                        // dokument speichern
+                        doc.Save("last.xml");
+                    }
+                    catch (Exception) { }
                 }
                 // tier spiegelt den Inhalt welcher Variable in der Tierchen.Elterngeneration wieder?
                 // oder ist das nur ein Platzhalter/Objekt für ein Element der Liste?
