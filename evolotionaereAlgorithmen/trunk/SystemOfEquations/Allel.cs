@@ -9,16 +9,16 @@ namespace SystemOfEquations
     {
         public List<bool> BinärCode = new List<bool>();
         private int m_MaxLenght;
-        private Interval m_interval;
+        private Intervall m_interval;
 
-        public Allel(int MaxLenght, Interval interval )
+        public Allel(int MaxLenght, Intervall interval )
         {
             m_MaxLenght = MaxLenght;
             m_interval = interval;
             BinärCode.Capacity = MaxLenght;
         }
 
-        public Allel(List<bool> list, Interval interval)
+        public Allel(List<bool> list, Intervall interval)
         {
             // TODO: Complete member initialization
             m_MaxLenght = list.Count();
@@ -90,7 +90,7 @@ namespace SystemOfEquations
             }
         }
         
-        public Interval Interval
+        public Intervall Interval
         {
             get
             {
