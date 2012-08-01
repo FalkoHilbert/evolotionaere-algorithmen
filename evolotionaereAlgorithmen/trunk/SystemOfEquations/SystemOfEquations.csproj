@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Allel.cs" />
-    <Compile Include="Interval.cs" />
+    <Compile Include="Intervall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tierchen.cs" />

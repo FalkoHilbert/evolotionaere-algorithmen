@@ -125,7 +125,7 @@ namespace SystemOfEquations
             return false;
         }
 
-        public static Tierchen RandomTier(int AllelLenght, List<Interval> interval, int GenLenght )
+        public static Tierchen RandomTier(int AllelLenght, List<Intervall> interval, int GenLenght )
         {
             // generate Gen
             Random randomizer = new Random();

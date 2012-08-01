@@ -10,11 +10,11 @@
       <Field Name="m_interval" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="SystemOfEquations.Interval">
+  <Class Name="SystemOfEquations.Intervall">
     <Position X="7.75" Y="0.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AIAAAAACAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Interval.cs</FileName>
+      <FileName>Intervall.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SystemOfEquations.Program">
@@ -27,7 +27,7 @@
       <Field Name="Elterngeneration" />
       <Field Name="Kindgeneration" />
       <Field Name="TierchenHistory" />
-      <Field Name="interval" />
+      <Field Name="intervall" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="SystemOfEquations.Tierchen">

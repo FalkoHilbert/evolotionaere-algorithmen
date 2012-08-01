@@ -12,7 +12,7 @@ namespace SystemOfEquations
         static List<Tierchen> Kindgeneration = new List<Tierchen>();
         static List<Tierchen> TierchenHistory = new List<Tierchen>();
 
-        static List<Interval> interval;
+        static List<Intervall> intervall;
         static int binärStringLenght = 0;
         static int countOfRecombinations = 0;
         static int elternSize = 0;
@@ -30,13 +30,13 @@ namespace SystemOfEquations
                 repeat = true;
                 Console.Clear();
                 TierchenHistory = new List<Tierchen>();
-                interval = new List<Interval>();
+                intervall = new List<Intervall>();
 
                 bool couldParsed = false;
                 bool loadDocument = false;
                 int gene = 0;
 
-                // es wurde keine Initial Generation übergeben
+                // Überspringe, falls keine start Generation übergeben wurde
                 if ( (args.Length > 0) )
                 {
                     Console.WriteLine("Soll das übergebenene Dokument geladen werden? (y/n)");
@@ -61,8 +61,8 @@ namespace SystemOfEquations
                                                 gen.Descendants("allel").Select(allel => 
                                                     // parse den bool-Wert
                                                     bool.Parse(allel.Value)).ToList(),
-                                                // Interval steht als Attribut innerhalb des "gen"-Elementes
-                                                new Interval(
+                                                // Intervall steht als Attribut innerhalb des "gen"-Elementes
+                                                new Intervall(
                                                     int.Parse(gen.Attribute("interval_start").Value),
                                                     int.Parse(gen.Attribute("interval_end").Value))
                                             )
@@ -77,59 +77,77 @@ namespace SystemOfEquations
                         
                     }
                 }
+                /* 
+                 * Programmbereiche auskommentiert um die Parametereingabe zu vereinfachen
+                 */
                 if (!loadDocument)
                 {
-                    while (!couldParsed)
-                    {
-                        Console.WriteLine("Größe der Elterngeneration?");
-                        string lenght = Console.ReadLine();
-                        couldParsed = Int32.TryParse(lenght, out elternSize);
-                    }
+                    //while (!couldParsed)
+                    //{
+                    //    Console.WriteLine("Größe der Elterngeneration?");
+                    //    string lenght = Console.ReadLine();
+                    //    couldParsed = Int32.TryParse(lenght, out elternSize);
+                    //}
+                    elternSize = 100;
+                    Console.WriteLine("Größe Elterngeneration = {0}", elternSize);
                 }
-                couldParsed = false;
-                while (!couldParsed)
-                {
-                    Console.WriteLine("Wie viele werden davon Rekombiniert?");
-                    string lenght = Console.ReadLine();
-                    couldParsed = Int32.TryParse(lenght, out countOfRecombinations);
-                    couldParsed = couldParsed ? countOfRecombinations < elternSize : false;
-                }
-                couldParsed = false;
-                if (!loadDocument)
-                {
-                    while (!couldParsed)
-                    {
-                        Console.WriteLine("Länge des Binärstrings?");
-                        string lenght = Console.ReadLine();
-                        couldParsed = Int32.TryParse(lenght, out binärStringLenght);
-                    }
-                }
-                couldParsed = false;
-                if (!loadDocument)
-                {
-                    while (!couldParsed)
-                    {
-                        Console.WriteLine("Anzahl der Gene?");
-                        string lenght = Console.ReadLine();
-                        couldParsed = Int32.TryParse(lenght, out gene);
-                    }
-                }
-                couldParsed = false;
-                if (!loadDocument)
-                {
-                    while (!couldParsed)
-                    {
-                        Console.WriteLine("Größe des {0}. Intervals?", (interval.Count() + 1));
-                        string lenght = Console.ReadLine();
-                        Interval actInterval;
-                        couldParsed = Interval.TryParse(lenght, out actInterval);
-                        if (couldParsed)
-                        {
-                            interval.Add(actInterval);
-                            couldParsed = (interval.Count() >= gene);
-                        }
-                    }
-                }
+                //couldParsed = false;
+                //while (!couldParsed)
+                //{
+                //    Console.WriteLine("Wie viele werden davon Rekombiniert?");
+                //    string lenght = Console.ReadLine();
+                //    couldParsed = Int32.TryParse(lenght, out countOfRecombinations);
+                //    couldParsed = couldParsed ? countOfRecombinations < elternSize : false;
+                //}
+                countOfRecombinations = 50;
+                Console.WriteLine("Anzahl Rekombinationen = {0}", countOfRecombinations); 
+
+                //couldParsed = false;
+                //if (!loadDocument)
+                //{
+                //    while (!couldParsed)
+                //    {
+                //        Console.WriteLine("Länge des Binärstrings?");
+                //        string lenght = Console.ReadLine();
+                //        couldParsed = Int32.TryParse(lenght, out binärStringLenght);
+                //    }
+                //}
+                /* Was sagt die binäre Stringlänge aus? Ist das [000] [001] ... oder [000000000]?
+                 */
+                binärStringLenght = 9;
+                Console.WriteLine("Binärstringlänge = {0}", binärStringLenght);
+
+                //couldParsed = false;
+                //if (!loadDocument)
+                //{
+                //    while (!couldParsed)
+                //    {
+                //        Console.WriteLine("Anzahl der Gene?");
+                //        string lenght = Console.ReadLine();
+                //        couldParsed = Int32.TryParse(lenght, out gene);
+                //    }
+                //}
+                gene = 1;
+                Console.WriteLine("Anzahl der Gene = {0}", gene);
+
+                //couldParsed = false;
+                //if (!loadDocument)
+                //{
+                //    while (!couldParsed)
+                //    {
+                //        Console.WriteLine("Größe des {0}. Intervals?", (intervall.Count() + 1));
+                //        string lenght = Console.ReadLine();
+                //        Intervall actInterval;
+                //        couldParsed = Intervall.TryParse(lenght, out actInterval);
+                //        if (couldParsed)
+                //        {
+                //            intervall.Add(actInterval);
+                //            couldParsed = (intervall.Count() >= gene);
+                //        }
+                //    }
+                //}
+                intervall.Add("3");
+
                 couldParsed = false;
                 while (!couldParsed)
                 {
@@ -151,7 +169,7 @@ namespace SystemOfEquations
                     // erzeuge Elterngeneration
                     while (Elterngeneration.Count < elternSize)
                     {
-                        Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, interval, funktionCount));
+                        Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, intervall, funktionCount));
                         /*
                          * Wie kommt das mit dem Distinct zustande ?
                          * Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ?
@@ -200,8 +218,7 @@ namespace SystemOfEquations
                     }
                     catch (Exception) { }
                 }
-                // tier spiegelt den Inhalt welcher Variable in der Tierchen.Elterngeneration wieder?
-                // oder ist das nur ein Platzhalter/Objekt für ein Element der Liste?
+                
                 foreach (var tier in Elterngeneration)
                 {
                     Console.WriteLine("Tier: {0} | Wert:\t{1}", tier.ToString(), tier.Wert.ToString("####0.#####"));
