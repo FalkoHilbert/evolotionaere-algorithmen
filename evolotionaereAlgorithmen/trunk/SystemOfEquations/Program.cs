@@ -146,23 +146,36 @@ namespace SystemOfEquations
                 //        }
                 //    }
                 //}
-                intervall.Add("3");
+                Intervall actIntervall;
+                couldParsed = Intervall.TryParse("3", out actIntervall);
+                intervall.Add(actIntervall);
+                couldParsed = Intervall.TryParse("3", out actIntervall);
+                intervall.Add(actIntervall);
+                couldParsed = Intervall.TryParse("3", out actIntervall);
+                intervall.Add(actIntervall);
+                // hier funktioniert noch die Ausgabe nicht richtig
+                Console.WriteLine("Intervalle = {0}", intervall);
 
                 couldParsed = false;
-                while (!couldParsed)
-                {
-                    Console.WriteLine("Größe der History?");
-                    string lenght = Console.ReadLine();
-                    couldParsed = Int32.TryParse(lenght, out historySize);
-                }
-                couldParsed = false;
+                //while (!couldParsed)
+                //{
+                //    Console.WriteLine("Größe der History?");
+                //    string lenght = Console.ReadLine();
+                //    couldParsed = Int32.TryParse(lenght, out historySize);
+                //}
+                //couldParsed = false;
+                /*
+                 * Wie definiert sich die Größe? Sind es Mengen von Tierchen oder Mengen von Generationen?
+                 */
+                historySize = 2;
+
                 while (!couldParsed)
                 {
                     Console.WriteLine("Generationen die erzeugt werden sollen?");
                     string lenght = Console.ReadLine();
                     couldParsed = Int32.TryParse(lenght, out countOfGenerations);
                 }                
-                // es wurde keine Initial Generation übergeben
+                // es wurde keine Anfangs-Generation übergeben
                 if (!loadDocument)
                 {
                     Elterngeneration = new List<Tierchen>();
