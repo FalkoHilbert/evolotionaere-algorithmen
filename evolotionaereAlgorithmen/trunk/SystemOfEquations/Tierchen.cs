@@ -10,8 +10,21 @@ namespace SystemOfEquations
         public List<Allel> GenCode;
         public double Wert;
 
+        public Tierchen(List<Allel> genCode)
+        {
+            if (genCode.Count != 0)
+            {
+                this.GenCode = genCode;
+                this.Bewerte();
+            }
+        }
+
         public Tierchen Mutation()
         {
+            /* Führe eine Mutation aus
+             * Bestimme dazu die Allelmenge 
+             * 
+             */
             Random randomizer = new Random();
             var AllelSize = GenCode.Select( allel => allel.Size ).Distinct();
             var InterValList = GenCode.Select( allel => allel.Interval ).ToList();
@@ -56,14 +69,7 @@ namespace SystemOfEquations
             else return this;
         }
 
-        public Tierchen(List<Allel> genCode)
-        {
-            if (genCode.Count != 0)
-            {
-                this.GenCode = genCode;
-                this.Bewerte();
-            }
-        }
+        
 
         public double Bewerte()
         {

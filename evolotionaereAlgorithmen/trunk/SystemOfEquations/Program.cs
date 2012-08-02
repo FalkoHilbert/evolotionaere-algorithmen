@@ -237,51 +237,40 @@ namespace SystemOfEquations
                     Console.WriteLine("Tier: {0} | Wert:\t{1}", tier.ToString(), tier.Wert.ToString("####0.#####"));
                 }
 
-
+                /*
+                 * Ab hier beginnen die Methoden
+                 * Zunächst wird Selektiert
+                 */ 
                 Random randomizer = new Random();
                 int counter = 0;
                 while (repeat )
                 {
                     repeat = false;
+                    // Sichere die aktuelle Elterngeneration in die History
                     TierchenHistory.AddRange(Elterngeneration);
+
+                    //Eliminiere die Doppelten
                     TierchenHistory = TierchenHistory.Distinct(new TierchenComparer()).OrderBy(tier => tier.Wert).Take(historySize).ToList();
-
-
+                    
                     Kindgeneration = new List<Tierchen>();
-                    // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
+                    
+                    /*
+                     * Der folgende Bereich sollte nicht direkt beschritten werden
+                     * Die Methoden sollten aufrufbar / wählbar sein
+                     */
 
-                    while (Kindgeneration.Count() < countOfRecombinations)
-                    {
-                        var index1 = randomizer.Next(0, Elterngeneration.Count);
-                        var index2 = index1;
-                        while (index2 == index1)
-                        {
-                            index2 = randomizer.Next(0, Elterngeneration.Count);
-                        }
+                    //Rufe Ein-Punkt-Rekombination auf
+                    einPunktRekombination(randomizer);
 
-                        Tierchen Kind1;
-                        Tierchen Kind2;
-                        Tierchen.OnePointRecombination(Elterngeneration[index1], Elterngeneration[index2], out Kind1, out Kind2);
-                        Kindgeneration.Add(Kind1);
-                        Kindgeneration.Add(Kind2);
-                        Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
-                    }
+                    mutiereKinder(randomizer);
 
-                    while (Kindgeneration.Count() < elternSize)
-                    {
-                        var index1 = randomizer.Next(0, Elterngeneration.Count);
-                        var wahrscheinlichkeit = randomizer.NextDouble();
-                        Tierchen kind;
-                        if (wahrscheinlichkeit <= 0.3) kind = Elterngeneration[index1].InzestMutation();
-                        else kind = Elterngeneration[index1].Mutation();
-
-                        Kindgeneration.Add(kind);
-
-                        //Vermutlich ein Filter, dass es keine Duplikate gibt?
-                        Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
-                    }
+                    //Lösche alle Eltern
                     Elterngeneration.Clear();
+
+                    //Kindgeneration ist neue Elterngeneration
                     Elterngeneration.AddRange(Kindgeneration);
+
+                    //Jetzt kann die Kindgeneration gelöscht werden
                     Kindgeneration.Clear();
 
                     foreach (var tier in Elterngeneration)
@@ -328,6 +317,50 @@ namespace SystemOfEquations
                         counter++;
                     }
                 }
+            }
+        }
+
+        private static void mutiereKinder(Random randomizer)
+        {
+            while (Kindgeneration.Count() < elternSize)
+            {
+                var index1 = randomizer.Next(0, Elterngeneration.Count);
+                var wahrscheinlichkeit = randomizer.NextDouble();
+                Tierchen kind;
+
+                if (wahrscheinlichkeit <= 0.3)
+                {
+                    kind = Elterngeneration[index1].InzestMutation();
+                }
+                else
+                {
+                    kind = Elterngeneration[index1].Mutation();
+                }
+
+                Kindgeneration.Add(kind);
+                Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
+            }
+        }
+
+        private static void einPunktRekombination(Random randomizer)
+        {
+            // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
+            // Wiederhole solange bis die Anzahl der Rekombinationen erreicht
+            while (Kindgeneration.Count() < countOfRecombinations)
+            {
+                var index1 = randomizer.Next(0, Elterngeneration.Count);
+                var index2 = index1;
+                while (index2 == index1)
+                {
+                    index2 = randomizer.Next(0, Elterngeneration.Count);
+                }
+
+                Tierchen Kind1;
+                Tierchen Kind2;
+                Tierchen.OnePointRecombination(Elterngeneration[index1], Elterngeneration[index2], out Kind1, out Kind2);
+                Kindgeneration.Add(Kind1);
+                Kindgeneration.Add(Kind2);
+                Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
             }
         }
     }
