@@ -125,7 +125,76 @@ namespace SystemOfEquations
             return false;
         }
 
-        public static Tierchen RandomTier(int AllelLenght, List<Intervall> interval, int GenLenght )
+        public static bool NPointRecombination(Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2, int recombinationPoints = 1 )
+        {
+            /* N-Punkt-Rekombination wählt zwei Tierchen sowie zufällig je n Allele ihres Gens.
+             * Kinder setzen sich aus einem Teil der Mutter/Vater sowie einem Teil des Vaters zusammen.
+             * Übergeben den Kindern zunächst den vollständigen Gencode und Entferne anschließend
+             * an einer zufälligen Stelle den übergebliebenen Code, füge anschließend einen anderen Code
+             * (des Vaters/Mutter) in das gleiche Tierchen ein.
+             */
+
+            kind1 = null;
+            kind2 = null;
+            if (mutter.GenCode.Count() == vater.GenCode.Count()
+                && mutter.GenCode.Count() > 0
+                && mutter.CompleteGenCode.Count() == vater.CompleteGenCode.Count()
+                && mutter.CompleteGenCode.Count() > 0)
+            {
+
+                // wähle Zahl z
+                Random randomizer = new Random();
+
+                if (recombinationPoints <= mutter.CompleteGenCode.Count())
+                {
+                    bool chooseFirstFromMother = true;
+                    // Gib eine Folge von eindeutigen (unsortierten?) Allelen des jew. Tierchens aus
+                    // mehrere Allele in einem Tierchen sind möglich - müssen aber extra berücksichtigt werden
+                    var AllelSizeMutter = mutter.GenCode.Select(allel => allel.Size).Distinct();
+                    var AllelSizeVater = mutter.GenCode.Select(allel => allel.Size).Distinct();
+                    if (AllelSizeMutter.Count() == 1 && AllelSizeVater.Count() == 1)
+                    {
+                        var genCodeKind1 = mutter.CompleteGenCode;
+                        var genCodeKind2 = vater.CompleteGenCode;
+
+                        // erstelle Split-indizes
+                        var SplitIndizes = new List<int>();
+                        for (int i = 0; i < recombinationPoints; i++)
+                        {
+                            SplitIndizes.Add( randomizer.Next(i == 0?0:SplitIndizes.LastOrDefault()+1, genCodeKind1.Count()+1 - (recombinationPoints - i)));
+                        }
+                        int GenCodeSize = genCodeKind1.Count();
+                        SplitIndizes.Sort();
+                        // für jeden Splitindex  gencode zusammensetzen
+                        foreach (var splitIndex in SplitIndizes)
+                        {
+                            if (chooseFirstFromMother)
+                            {
+                                genCodeKind1.RemoveRange(splitIndex, GenCodeSize - splitIndex);
+                                genCodeKind1.AddRange(vater.CompleteGenCode.GetRange(splitIndex, GenCodeSize - splitIndex));
+                                genCodeKind2.RemoveRange(splitIndex, GenCodeSize - splitIndex);
+                                genCodeKind2.AddRange(mutter.CompleteGenCode.GetRange(splitIndex, GenCodeSize - splitIndex));
+                            }
+                            else 
+                            {
+                                genCodeKind1.RemoveRange(splitIndex, GenCodeSize - splitIndex);
+                                genCodeKind1.AddRange(mutter.CompleteGenCode.GetRange(splitIndex, GenCodeSize - splitIndex));
+                                genCodeKind2.RemoveRange(splitIndex, GenCodeSize - splitIndex);
+                                genCodeKind2.AddRange(vater.CompleteGenCode.GetRange(splitIndex, GenCodeSize - splitIndex));
+                            }
+                            chooseFirstFromMother = !chooseFirstFromMother;
+                        }
+                        kind1 = new Tierchen(mutter.GenCode);
+                        kind1.CompleteGenCode = genCodeKind1;
+                        kind2 = new Tierchen(vater.GenCode);
+                        kind2.CompleteGenCode = genCodeKind2;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static Tierchen RandomTier(int AllelLenght, List<Intervall> interval, int GenLenght)
         {
             // generate Gen
             Random randomizer = new Random();
