@@ -89,6 +89,22 @@ namespace SystemOfEquations
         {
             return Math.Pow(GenCode[0].DecimalValue - 1, 2) + Math.Pow(2 * GenCode[1].DecimalValue - Math.Sqrt(2), 2) + Math.Pow(GenCode[2].DecimalValue - 5, 2) - 4;
         }
+        /*
+         * Selektionen
+         * 
+         * 
+         */
+
+
+
+
+
+
+        /*
+         * Rekombinationen
+         * 
+         * 
+         */
 
         public static bool OnePointRecombination(Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2)
         {
