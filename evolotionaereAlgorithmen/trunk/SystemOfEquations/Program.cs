@@ -18,6 +18,7 @@ namespace SystemOfEquations
         static int elternSize = 0;
         static int funktionCount = 3;
         static bool repeat = true;
+        static bool repeat2 = true;
         static bool restart = true;
         static int historySize = 10;
         static int countOfGenerations = 1;
@@ -258,7 +259,17 @@ namespace SystemOfEquations
                      * Der folgende Bereich sollte nicht direkt beschritten werden
                      * Die Methoden sollten aufrufbar / wählbar sein
                      */
-
+                    repeat2 = true;
+                    while (repeat2)
+                    {
+                        Console.WriteLine("Welche Selektion soll ausgeführt werden? [k] Komma / [...] ");
+                        var input = Console.ReadLine();
+                        if (input == "k")
+                        {
+                            repeat = false;
+                            KommaSelektion(randomizer);
+                        }
+                    }
                     //Rufe Ein-Punkt-Rekombination auf
                     einPunktRekombination(randomizer);
 
@@ -363,5 +374,45 @@ namespace SystemOfEquations
                 Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
             }
         }
+
+        private static void KommaSelektion(Random randomizer)
+        {
+            /* Wähle die Menge an notwendigen Kindern per Zufall nach der Form:
+             * µ/7 <= r <= µ/5
+             */
+            Console.WriteLine("Beginne mit Kommaselektion");
+            int mengeEltern = randomizer.Next(Elterngeneration.Count / 7, Elterngeneration.Count / 5);
+
+            Console.WriteLine("Anzahl der Elterntiere: {0}, Anzahl der Kindertiere: {1}", mengeEltern, elternSize);
+            
+            
+            while (Kindgeneration.Count() < mengeEltern)
+            {
+                //erzeuge temporäre Kindgeneration, die dann Elterngeneration sind
+                int index = randomizer.Next(0, Elterngeneration.Count);
+
+                Kindgeneration.Add(Elterngeneration[index]);
+            }
+            // Sichere die aktuelle Elterngeneration in die History
+            TierchenHistory.AddRange(Elterngeneration);
+
+            // ### HIER NOCH EIN DISTINCT NÖTIG??? ###
+
+            //Lösche alle Eltern
+            Elterngeneration.Clear();
+
+            //Kindgeneration ist neue Elterngeneration
+            Elterngeneration.AddRange(Kindgeneration);
+
+            //Erzeuge aus den Selektierten Eltern die neue Kindgeneration von alter Stärke
+            while (Kindgeneration.Count() < elternSize)
+            {
+                /*
+                 * Hier passiert jetzt eine Rekombination
+                 * Wahl zwischen Ein-Punkt / N-Punkt
+                 */ 
+            }
+        }
+
     }
 }
