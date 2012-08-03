@@ -266,14 +266,14 @@ namespace SystemOfEquations
                         var input = Console.ReadLine();
                         if (input == "k")
                         {
-                            repeat = false;
+                            repeat2 = false;
                             KommaSelektion(randomizer);
                         }
                     }
                     //Rufe Ein-Punkt-Rekombination auf
-                    einPunktRekombination(randomizer);
+                    //einPunktRekombination(randomizer, countOfRecombinations);
 
-                    mutiereKinder(randomizer);
+                    //mutiereKinder(randomizer);
 
                     //Lösche alle Eltern
                     Elterngeneration.Clear();
@@ -353,11 +353,11 @@ namespace SystemOfEquations
             }
         }
 
-        private static void einPunktRekombination(Random randomizer)
+        private static void einPunktRekombination(Random randomizer, int recombinations)
         {
             // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
             // Wiederhole solange bis die Anzahl der Rekombinationen erreicht
-            while (Kindgeneration.Count() < countOfRecombinations)
+            while (Kindgeneration.Count() < recombinations)
             {
                 var index1 = randomizer.Next(0, Elterngeneration.Count);
                 var index2 = index1;
@@ -404,13 +404,18 @@ namespace SystemOfEquations
             //Kindgeneration ist neue Elterngeneration
             Elterngeneration.AddRange(Kindgeneration);
 
+            Kindgeneration.Clear();
+
             //Erzeuge aus den Selektierten Eltern die neue Kindgeneration von alter Stärke
             while (Kindgeneration.Count() < elternSize)
             {
                 /*
                  * Hier passiert jetzt eine Rekombination
                  * Wahl zwischen Ein-Punkt / N-Punkt
-                 */ 
+                 * Auswahl = Globale Variable? ==> Führe immer die gleiche Methode aus
+                 */
+                einPunktRekombination(randomizer, elternSize);
+
             }
         }
 
