@@ -83,92 +83,93 @@ namespace SystemOfEquations
                  */
                 if (!loadDocument)
                 {
-                    //while (!couldParsed)
-                    //{
-                    //    Console.WriteLine("Größe der Elterngeneration?");
-                    //    string lenght = Console.ReadLine();
-                    //    couldParsed = Int32.TryParse(lenght, out elternSize);
-                    //}
-                    elternSize = 100;
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Größe der Elterngeneration?");
+                        string lenght = Console.ReadLine();
+                        couldParsed = Int32.TryParse(lenght, out elternSize);
+                    }
+                    //elternSize = 100;
                     Console.WriteLine("Größe Elterngeneration = {0}", elternSize);
                 }
-                //couldParsed = false;
-                //while (!couldParsed)
-                //{
-                //    Console.WriteLine("Wie viele werden davon Rekombiniert?");
-                //    string lenght = Console.ReadLine();
-                //    couldParsed = Int32.TryParse(lenght, out countOfRecombinations);
-                //    couldParsed = couldParsed ? countOfRecombinations < elternSize : false;
-                //}
-                countOfRecombinations = 50;
-                Console.WriteLine("Anzahl Rekombinationen = {0}", countOfRecombinations); 
+                couldParsed = false;
+                while (!couldParsed)
+                {
+                    Console.WriteLine("Wie viele werden davon Rekombiniert?");
+                    string lenght = Console.ReadLine();
+                    couldParsed = Int32.TryParse(lenght, out countOfRecombinations);
+                    couldParsed = couldParsed ? countOfRecombinations < elternSize : false;
+                }
+                //countOfRecombinations = 50;
+                Console.WriteLine("Anzahl Rekombinationen = {0}", countOfRecombinations);
 
-                //couldParsed = false;
-                //if (!loadDocument)
-                //{
-                //    while (!couldParsed)
-                //    {
-                //        Console.WriteLine("Länge des Binärstrings?");
-                //        string lenght = Console.ReadLine();
-                //        couldParsed = Int32.TryParse(lenght, out binärStringLenght);
-                //    }
-                //}
-                /* Was sagt die binäre Stringlänge aus? Ist das [000] [001] ... oder [000000000]?
+                couldParsed = false;
+                if (!loadDocument)
+                {
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Länge des Binärstrings?");
+                        string lenght = Console.ReadLine();
+                        couldParsed = Int32.TryParse(lenght, out binärStringLenght);
+                    }
+                }
+                /* ### Was sagt die binäre Stringlänge aus? Ist das [000] [001] ... oder [000000000]? ###
                  */
                 binärStringLenght = 9;
                 Console.WriteLine("Binärstringlänge = {0}", binärStringLenght);
 
-                //couldParsed = false;
-                //if (!loadDocument)
-                //{
-                //    while (!couldParsed)
-                //    {
-                //        Console.WriteLine("Anzahl der Gene?");
-                //        string lenght = Console.ReadLine();
-                //        couldParsed = Int32.TryParse(lenght, out gene);
-                //    }
-                //}
-                gene = 1;
+                couldParsed = false;
+                if (!loadDocument)
+                {
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Anzahl der Gene?");
+                        string lenght = Console.ReadLine();
+                        couldParsed = Int32.TryParse(lenght, out gene);
+                    }
+                }
+                //gene = 1;
                 Console.WriteLine("Anzahl der Gene = {0}", gene);
 
-                //couldParsed = false;
-                //if (!loadDocument)
-                //{
-                //    while (!couldParsed)
-                //    {
-                //        Console.WriteLine("Größe des {0}. Intervals?", (intervall.Count() + 1));
-                //        string lenght = Console.ReadLine();
-                //        Intervall actInterval;
-                //        couldParsed = Intervall.TryParse(lenght, out actInterval);
-                //        if (couldParsed)
-                //        {
-                //            intervall.Add(actInterval);
-                //            couldParsed = (intervall.Count() >= gene);
-                //        }
-                //    }
-                //}
-                Intervall actIntervall;
-                couldParsed = Intervall.TryParse("3", out actIntervall);
-                intervall.Add(actIntervall);
-                couldParsed = Intervall.TryParse("3", out actIntervall);
-                intervall.Add(actIntervall);
-                couldParsed = Intervall.TryParse("3", out actIntervall);
-                intervall.Add(actIntervall);
-                // hier funktioniert noch die Ausgabe nicht richtig
+                couldParsed = false;
+                if (!loadDocument)
+                {
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Größe des {0}. Intervals?", (intervall.Count() + 1));
+                        string lenght = Console.ReadLine();
+                        Intervall actInterval;
+                        couldParsed = Intervall.TryParse(lenght, out actInterval);
+                        if (couldParsed)
+                        {
+                            intervall.Add(actInterval);
+                            couldParsed = (intervall.Count() >= gene);
+                        }
+                    }
+                }
+                //Intervall actIntervall;
+                //couldParsed = Intervall.TryParse("3", out actIntervall);
+                //intervall.Add(actIntervall);
+                //couldParsed = Intervall.TryParse("3", out actIntervall);
+                //intervall.Add(actIntervall);
+                //couldParsed = Intervall.TryParse("3", out actIntervall);
+                //intervall.Add(actIntervall);
+
+                // ### hier funktioniert noch die Ausgabe nicht richtig ###
                 Console.WriteLine("Intervalle = {0}", intervall);
 
                 couldParsed = false;
-                //while (!couldParsed)
-                //{
-                //    Console.WriteLine("Größe der History?");
-                //    string lenght = Console.ReadLine();
-                //    couldParsed = Int32.TryParse(lenght, out historySize);
-                //}
-                //couldParsed = false;
+                while (!couldParsed)
+                {
+                    Console.WriteLine("Größe der History?");
+                    string lenght = Console.ReadLine();
+                    couldParsed = Int32.TryParse(lenght, out historySize);
+                }
+                couldParsed = false;
                 /*
-                 * Wie definiert sich die Größe? Sind es Mengen von Tierchen oder Mengen von Generationen?
+                 * ### Wie definiert sich die Größe? Sind es Mengen von Tierchen oder Mengen von Generationen? ###
                  */
-                historySize = 2;
+                //historySize = 2;
 
                 while (!couldParsed)
                 {
@@ -185,9 +186,9 @@ namespace SystemOfEquations
                     {
                         Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, intervall, funktionCount));
                         /*
-                         * Wie kommt das mit dem Distinct zustande ?
-                         * Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ?
-                         * Welche voraussetzungen müssen erfüllt sein ?
+                         * ### Wie kommt das mit dem Distinct zustande ? ###
+                         * ### Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ? ###
+                         * ### Welche voraussetzungen müssen erfüllt sein ? ###
                          */
                         Elterngeneration = Elterngeneration.Distinct(new TierchenComparer()).ToList();
                     }
@@ -271,9 +272,9 @@ namespace SystemOfEquations
                         }
                     }
                     //Rufe Ein-Punkt-Rekombination auf
-                    //einPunktRekombination(randomizer, countOfRecombinations);
+                    Kindgeneration = einPunktRekombination(randomizer, countOfRecombinations, Kindgeneration, Elterngeneration);
 
-                    //mutiereKinder(randomizer);
+                    Kindgeneration = mutiereKinder(randomizer, Kindgeneration, Elterngeneration);
 
                     //Lösche alle Eltern
                     Elterngeneration.Clear();
@@ -331,7 +332,7 @@ namespace SystemOfEquations
             }
         }
 
-        private static void mutiereKinder(Random randomizer)
+        private static List<Tierchen> mutiereKinder(Random randomizer, List<Tierchen> kindGen, List<Tierchen> elternGen)
         {
             while (Kindgeneration.Count() < elternSize)
             {
@@ -341,38 +342,40 @@ namespace SystemOfEquations
 
                 if (wahrscheinlichkeit <= 0.3)
                 {
-                    kind = Elterngeneration[index1].InzestMutation();
+                    kind = elternGen[index1].InzestMutation();
                 }
                 else
                 {
-                    kind = Elterngeneration[index1].Mutation();
+                    kind = elternGen[index1].Mutation();
                 }
 
-                Kindgeneration.Add(kind);
-                Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
+                kindGen.Add(kind);
+                kindGen = kindGen.Distinct(new TierchenComparer()).ToList();
             }
+            return kindGen;
         }
 
-        private static void einPunktRekombination(Random randomizer, int recombinations)
+        private static List<Tierchen> einPunktRekombination(Random randomizer, int recombinations, List<Tierchen> kindGen, List<Tierchen> elternGen)
         {
             // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
             // Wiederhole solange bis die Anzahl der Rekombinationen erreicht
-            while (Kindgeneration.Count() < recombinations)
+            while (kindGen.Count() < recombinations)
             {
-                var index1 = randomizer.Next(0, Elterngeneration.Count);
+                var index1 = randomizer.Next(0, elternGen.Count);
                 var index2 = index1;
                 while (index2 == index1)
                 {
-                    index2 = randomizer.Next(0, Elterngeneration.Count);
+                    index2 = randomizer.Next(0, elternGen.Count);
                 }
 
                 Tierchen Kind1;
                 Tierchen Kind2;
-                Tierchen.OnePointRecombination(Elterngeneration[index1], Elterngeneration[index2], out Kind1, out Kind2);
-                Kindgeneration.Add(Kind1);
-                Kindgeneration.Add(Kind2);
-                Kindgeneration = Kindgeneration.Distinct(new TierchenComparer()).ToList();
+                Tierchen.OnePointRecombination(Elterngeneration[index1], elternGen[index2], out Kind1, out Kind2);
+                kindGen.Add(Kind1);
+                kindGen.Add(Kind2);
+                kindGen = kindGen.Distinct(new TierchenComparer()).ToList();
             }
+            return kindGen
         }
 
         private static void KommaSelektion(Random randomizer)
@@ -412,7 +415,7 @@ namespace SystemOfEquations
                 /*
                  * Hier passiert jetzt eine Rekombination
                  * Wahl zwischen Ein-Punkt / N-Punkt
-                 * Auswahl = Globale Variable? ==> Führe immer die gleiche Methode aus
+                 * ### Auswahl = Globale Variable? ==> Führe immer die gleiche Methode aus ###
                  */
                 einPunktRekombination(randomizer, elternSize);
 
