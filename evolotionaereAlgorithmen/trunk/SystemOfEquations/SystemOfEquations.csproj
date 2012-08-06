@@ -44,11 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Allel.cs" />
+    <Compile Include="EvolutionAlgorithms.cs" />
     <Compile Include="Intervall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tierchen.cs" />
     <Compile Include="TierchenComparer.cs" />
+    <Compile Include="Wahlverfahren.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

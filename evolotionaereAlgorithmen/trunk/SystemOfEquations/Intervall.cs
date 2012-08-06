@@ -30,5 +30,10 @@ namespace SystemOfEquations
             couldParsed = couldParsed ? Int32.TryParse(values[1], out interval.end) : false;
             return couldParsed;
         }
+
+        public override string ToString()
+        {
+            return String.Format("[{0},{1}]",start, end);
+        }
     }
 }

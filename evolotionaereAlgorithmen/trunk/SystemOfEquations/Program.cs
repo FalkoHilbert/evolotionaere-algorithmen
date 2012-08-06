@@ -112,11 +112,13 @@ namespace SystemOfEquations
                         string lenght = Console.ReadLine();
                         couldParsed = Int32.TryParse(lenght, out binärStringLenght);
                     }
+                    /* ### Was sagt die binäre Stringlänge aus? Ist das [000] [001] ... oder [000000000]? ###
+                     * !!! gibt die Anzahl der stellen innerhalb eines Allels an
+                     * !!! Bsp: Länge = 6 -> Gen: [001001] [011011] [010010]
+                     */
+                    // binärStringLenght = 9;
+                    // Console.WriteLine("Binärstringlänge = {0}", binärStringLenght);
                 }
-                /* ### Was sagt die binäre Stringlänge aus? Ist das [000] [001] ... oder [000000000]? ###
-                 */
-                binärStringLenght = 9;
-                Console.WriteLine("Binärstringlänge = {0}", binärStringLenght);
 
                 couldParsed = false;
                 if (!loadDocument)
@@ -127,9 +129,10 @@ namespace SystemOfEquations
                         string lenght = Console.ReadLine();
                         couldParsed = Int32.TryParse(lenght, out gene);
                     }
+                    //gene = 1;
+                    //Console.WriteLine("Anzahl der Gene = {0}", gene);
                 }
-                //gene = 1;
-                Console.WriteLine("Anzahl der Gene = {0}", gene);
+
 
                 couldParsed = false;
                 if (!loadDocument)
@@ -146,17 +149,22 @@ namespace SystemOfEquations
                             couldParsed = (intervall.Count() >= gene);
                         }
                     }
-                }
-                //Intervall actIntervall;
-                //couldParsed = Intervall.TryParse("3", out actIntervall);
-                //intervall.Add(actIntervall);
-                //couldParsed = Intervall.TryParse("3", out actIntervall);
-                //intervall.Add(actIntervall);
-                //couldParsed = Intervall.TryParse("3", out actIntervall);
-                //intervall.Add(actIntervall);
+                    //Intervall actIntervall;
+                    //couldParsed = Intervall.TryParse("3", out actIntervall);
+                    //intervall.Add(actIntervall);
+                    //couldParsed = Intervall.TryParse("3", out actIntervall);
+                    //intervall.Add(actIntervall);
+                    //couldParsed = Intervall.TryParse("3", out actIntervall);
+                    //intervall.Add(actIntervall);
 
-                // ### hier funktioniert noch die Ausgabe nicht richtig ###
-                Console.WriteLine("Intervalle = {0}", intervall);
+                    // ### hier funktioniert noch die Ausgabe nicht richtig ###
+                    // !!! liegt daran, dass interval ein Object ist und c# keine automatische object ausgabe hat
+                    // !!! lösung wäre entweder die toString Methode im Object zu deklarieren oder per hand den Start und das ende auszugeben
+                    // !!! HINWEIS: die Methode TryParse in der Intervall Klasse versucht aus einem String wie: "[-1,1]" oder "-1,1" ein Intervall auszulesen 
+                    //couldParsed = Intervall.TryParse("3,5", out actIntervall);
+                    //intervall.Add(actIntervall);                 
+                    Console.WriteLine("Intervalle = {0}", intervall);
+                }
 
                 couldParsed = false;
                 while (!couldParsed)
@@ -168,6 +176,8 @@ namespace SystemOfEquations
                 couldParsed = false;
                 /*
                  * ### Wie definiert sich die Größe? Sind es Mengen von Tierchen oder Mengen von Generationen? ###
+                 * !!! Größe der History bestimmt, wie viel besten Tierchen gesoeichert werden sollen, damit die History nicht unnötig voll läuft
+                 * !!! Beispiel: Größe der History auf 10 gesetzt bewirkt, dass die History ( nach Wertigkeit sortiert ) die besten 10 Tierchen enthält
                  */
                 //historySize = 2;
 
@@ -189,6 +199,7 @@ namespace SystemOfEquations
                          * ### Wie kommt das mit dem Distinct zustande ? ###
                          * ### Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ? ###
                          * ### Welche voraussetzungen müssen erfüllt sein ? ###
+                         * !!! Hatten wir ja geklärt, oder?
                          */
                         Elterngeneration = Elterngeneration.Distinct(new TierchenComparer()).ToList();
                     }
@@ -255,35 +266,50 @@ namespace SystemOfEquations
                     TierchenHistory = TierchenHistory.Distinct(new TierchenComparer()).OrderBy(tier => tier.Wert).Take(historySize).ToList();
                     
                     Kindgeneration = new List<Tierchen>();
-                    
+
+                    //Rufe Ein-Punkt-Rekombination auf
+                    Kindgeneration = EvolutionAlgorithms.einPunktRekombination(randomizer, countOfRecombinations, Kindgeneration, Elterngeneration);
+
+                    Kindgeneration = EvolutionAlgorithms.mutiereKinder(randomizer, Kindgeneration, Elterngeneration, elternSize);
+
                     /*
                      * Der folgende Bereich sollte nicht direkt beschritten werden
                      * Die Methoden sollten aufrufbar / wählbar sein
                      */
+                    // ### [NEW] ist ein wenig Kritisch, da diese Frage vor jedem Erteugen einer neuen Generation gestellt wird
+                    // ### das heißt wenn man auf einen Schlag 100 Generationen erzeugen will wird diese Schleife immer durch diese Frage unterbrochen
+                    // ### Frage Stellen, bevor ein neuen Durchlauf beginnt (siehe Frage nach Wiederholung)
                     repeat2 = true;
                     while (repeat2)
                     {
-                        Console.WriteLine("Welche Selektion soll ausgeführt werden? [k] Komma / [...] ");
+                        Console.WriteLine("Welche Selektion soll ausgeführt werden?\r\n[n]: keine (Kinder als Elten übernehmen)\r\n[k]: Komma\r\n[p]: Plus\r\n[...]");
                         var input = Console.ReadLine();
-                        if (input == "k")
+                        if (input == "n")
                         {
                             repeat2 = false;
-                            KommaSelektion(randomizer);
+                            //Lösche alle Eltern
+                            Elterngeneration.Clear();
+
+                            //Kindgeneration ist neue Elterngeneration
+                            Elterngeneration.AddRange(Kindgeneration);
+
+                            //Jetzt kann die Kindgeneration gelöscht werden
+                            Kindgeneration.Clear();
                         }
-                    }
-                    //Rufe Ein-Punkt-Rekombination auf
-                    Kindgeneration = einPunktRekombination(randomizer, countOfRecombinations, Kindgeneration, Elterngeneration);
+                        else if (input == "k")
+                        {
+                            repeat2 = false;
+                            EvolutionAlgorithms.commaSelection(Kindgeneration, Wahlverfahren.determenistic);
+                            //KommaSelektion(randomizer);
+                        }
+                        else if (input == "p")
+                        {
+                            repeat2 = false;
+                            EvolutionAlgorithms.plusSelection(Elterngeneration,Kindgeneration, Wahlverfahren.determenistic);
+                            //KommaSelektion(randomizer);
+                        }
+                    }                    
 
-                    Kindgeneration = mutiereKinder(randomizer, Kindgeneration, Elterngeneration);
-
-                    //Lösche alle Eltern
-                    Elterngeneration.Clear();
-
-                    //Kindgeneration ist neue Elterngeneration
-                    Elterngeneration.AddRange(Kindgeneration);
-
-                    //Jetzt kann die Kindgeneration gelöscht werden
-                    Kindgeneration.Clear();
 
                     foreach (var tier in Elterngeneration)
                     {
@@ -292,6 +318,12 @@ namespace SystemOfEquations
 
                     if (counter >= countOfGenerations)
                     {
+                        // letzte Sicherung der Elterngeneration in die History
+                        TierchenHistory.AddRange(Elterngeneration);
+
+                        //Eliminiere die Doppelten
+                        TierchenHistory = TierchenHistory.Distinct(new TierchenComparer()).OrderBy(tier => tier.Wert).Take(historySize).ToList();
+
                         counter = 0;
                         Console.WriteLine("Soll das Beste aller erzeugten Individuen gezeigt werden? (y/n)");
                         var input = Console.ReadLine();
@@ -332,59 +364,15 @@ namespace SystemOfEquations
             }
         }
 
-        private static List<Tierchen> mutiereKinder(Random randomizer, List<Tierchen> kindGen, List<Tierchen> elternGen)
-        {
-            while (Kindgeneration.Count() < elternSize)
-            {
-                var index1 = randomizer.Next(0, Elterngeneration.Count);
-                var wahrscheinlichkeit = randomizer.NextDouble();
-                Tierchen kind;
 
-                if (wahrscheinlichkeit <= 0.3)
-                {
-                    kind = elternGen[index1].InzestMutation();
-                }
-                else
-                {
-                    kind = elternGen[index1].Mutation();
-                }
-
-                kindGen.Add(kind);
-                kindGen = kindGen.Distinct(new TierchenComparer()).ToList();
-            }
-            return kindGen;
-        }
-
-        private static List<Tierchen> einPunktRekombination(Random randomizer, int recombinations, List<Tierchen> kindGen, List<Tierchen> elternGen)
-        {
-            // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
-            // Wiederhole solange bis die Anzahl der Rekombinationen erreicht
-            while (kindGen.Count() < recombinations)
-            {
-                var index1 = randomizer.Next(0, elternGen.Count);
-                var index2 = index1;
-                while (index2 == index1)
-                {
-                    index2 = randomizer.Next(0, elternGen.Count);
-                }
-
-                Tierchen Kind1;
-                Tierchen Kind2;
-                Tierchen.OnePointRecombination(Elterngeneration[index1], elternGen[index2], out Kind1, out Kind2);
-                kindGen.Add(Kind1);
-                kindGen.Add(Kind2);
-                kindGen = kindGen.Distinct(new TierchenComparer()).ToList();
-            }
-            return kindGen
-        }
-
-        private static void KommaSelektion(Random randomizer)
+/*
+        private static void KommaSelektion(Random randomizer, List<Tierchen> kindGen, List<Tierchen> elternGen)
         {
             /* Wähle die Menge an notwendigen Kindern per Zufall nach der Form:
              * µ/7 <= r <= µ/5
-             */
+             *
             Console.WriteLine("Beginne mit Kommaselektion");
-            int mengeEltern = randomizer.Next(Elterngeneration.Count / 7, Elterngeneration.Count / 5);
+            int mengeEltern = randomizer.Next(elternGen.Count() / 7, elternGen.Count() / 5);
 
             Console.WriteLine("Anzahl der Elterntiere: {0}, Anzahl der Kindertiere: {1}", mengeEltern, elternSize);
             
@@ -400,6 +388,7 @@ namespace SystemOfEquations
             TierchenHistory.AddRange(Elterngeneration);
 
             // ### HIER NOCH EIN DISTINCT NÖTIG??? ###
+            // !!! ich denke, dass es garnicht notwendig ist die Generation in die History zu sichern, da dies ja generell oben vor jedem Schleifen durchlauf passiert
 
             //Lösche alle Eltern
             Elterngeneration.Clear();
@@ -416,11 +405,12 @@ namespace SystemOfEquations
                  * Hier passiert jetzt eine Rekombination
                  * Wahl zwischen Ein-Punkt / N-Punkt
                  * ### Auswahl = Globale Variable? ==> Führe immer die gleiche Methode aus ###
-                 */
+                 * !!! Hierfür sollte genauso wie bei der Frage nach der Selektion eine Frage vor dem erzeugen einer Menge von Generationen eine Abfrage kommen
+                 *
                 einPunktRekombination(randomizer, elternSize);
 
             }
         }
-
+*/
     }
 }
