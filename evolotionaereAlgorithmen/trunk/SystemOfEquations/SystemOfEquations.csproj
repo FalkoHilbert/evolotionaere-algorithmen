@@ -46,6 +46,7 @@
     <Compile Include="Allel.cs" />
     <Compile Include="EvolutionAlgorithms.cs" />
     <Compile Include="Intervall.cs" />
+    <Compile Include="Problem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tierchen.cs" />
