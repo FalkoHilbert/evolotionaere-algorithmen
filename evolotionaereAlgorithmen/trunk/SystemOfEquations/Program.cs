@@ -22,6 +22,7 @@ namespace SystemOfEquations
         static bool restart = true;
         static int historySize = 10;
         static int countOfGenerations = 1;
+        static int pointOfRecombination = 1;
         static Problem problem = null;
 
         static void Main(string[] args)
@@ -94,7 +95,8 @@ namespace SystemOfEquations
                                         + "[1] lineares Gleichungssystem\r\n"
                                         + "[2] Griewank-Funktion\r\n"
                                         + "[3] Ackley-Funktion\r\n"
-                                        + "[4] C-Funktion");
+                                        + "[4] C-Funktion\r\n"
+                                        + "[5] Nullstellen-Funktion");
                         string lenght = Console.ReadLine();
                         couldParsed = Problem.TryParse(lenght, out problem);
                     }
@@ -122,7 +124,13 @@ namespace SystemOfEquations
                 }
                 //countOfRecombinations = 50;
                 Console.WriteLine("Anzahl Rekombinationen = {0}", countOfRecombinations);
-
+                couldParsed = false;
+                while (!couldParsed)
+                {
+                    Console.WriteLine("Wie viele Rekombinationspunkte sollen verwendet werden?");
+                    string lenght = Console.ReadLine();
+                    couldParsed = Int32.TryParse(lenght, out pointOfRecombination);
+                }
                 couldParsed = false;
                 if (!loadDocument)
                 {
@@ -314,7 +322,7 @@ namespace SystemOfEquations
                     Kindgeneration = new List<Tierchen>();
 
                     //Rufe Ein-Punkt-Rekombination auf
-                    Kindgeneration = EvolutionAlgorithms.einPunktRekombination(randomizer, countOfRecombinations, Kindgeneration, Elterngeneration);
+                    Kindgeneration = EvolutionAlgorithms.NPunktRekombination(randomizer, countOfRecombinations, pointOfRecombination, Kindgeneration, Elterngeneration);
 
                     Kindgeneration = EvolutionAlgorithms.mutiereKinder(randomizer, Kindgeneration, Elterngeneration, elternSize);
 
@@ -328,10 +336,11 @@ namespace SystemOfEquations
                     repeat2 = true;
                     while (repeat2)
                     {
+                        /*
                         Console.WriteLine("Welche Selektion soll ausgeführt werden?\r\n[n]: keine (Kinder als Elten übernehmen)\r\n[k]: Komma\r\n[p]: Plus\r\n[...]");
                         var input = Console.ReadLine();
                         if (input == "n")
-                        {
+                        {*/
                             repeat2 = false;
                             //Lösche alle Eltern
                             Elterngeneration.Clear();
@@ -340,7 +349,7 @@ namespace SystemOfEquations
                             Elterngeneration.AddRange(Kindgeneration);
 
                             //Jetzt kann die Kindgeneration gelöscht werden
-                            Kindgeneration.Clear();
+                            Kindgeneration.Clear();/*
                         }
                         else if (input == "k")
                         {
@@ -353,7 +362,7 @@ namespace SystemOfEquations
                             repeat2 = false;
                             EvolutionAlgorithms.plusSelection(Elterngeneration,Kindgeneration, Wahlverfahren.determenistic);
                             //KommaSelektion(randomizer);
-                        }
+                        }*/
                     }                    
 
 
