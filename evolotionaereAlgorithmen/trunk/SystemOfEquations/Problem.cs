@@ -10,7 +10,8 @@ namespace SystemOfEquations
         SystemOfEquations = 1,
         Griewank_Funktion = 2,
         Ackley_Funktion = 3,
-        C_Funktion = 4
+        C_Funktion = 4,
+        Nullstellen_Funktion = 5
     }
 
     public class Problem
@@ -56,10 +57,23 @@ namespace SystemOfEquations
                     return Math.Sqrt(Math.Pow(SystemOfEquations_funktion1(GenCode), 2) + Math.Pow(SystemOfEquations_funktion2(GenCode), 2) + Math.Pow(SystemOfEquations_funktion3(GenCode), 2));
                 case ProblemType.Griewank_Funktion:
                     return Griewank_funktion1(GenCode);
+                case ProblemType.Ackley_Funktion:
+                    return Ackley_funktion1(GenCode);
+                case ProblemType.C_Funktion:
+                    return C_funktion1(GenCode);
+                case ProblemType.Nullstellen_Funktion:
+                    double fitness = 0;
+                    for (int i = 0; i < GenCode.Count()-1; i++)
+                    {
+                        fitness += Math.Pow(Nullstellen_funktion_i(i, GenCode), 2);
+                    }
+                    fitness += Math.Pow(Nullstellen_funktion_n(GenCode), 2);
+                    return Math.Sqrt(fitness);
                 default:
                     return Math.Sqrt(Math.Pow(SystemOfEquations_funktion1(GenCode), 2) + Math.Pow(SystemOfEquations_funktion2(GenCode), 2) + Math.Pow(SystemOfEquations_funktion3(GenCode), 2));
             }
         }
+
 
         #region Funktionen des Gleichungssystem
 
@@ -124,6 +138,26 @@ namespace SystemOfEquations
             }
 
             return 2 * result;
+        }
+
+        #endregion
+
+        #region Nullstellen-Funktion
+
+        private double Nullstellen_funktion_i(int i, List<Allel> GenCode)
+        {
+            return GenCode[i].DecimalValue + GenCode.Sum(gen => gen.DecimalValue) - (GenCode.Count() + 1);
+        }
+
+        private double Nullstellen_funktion_n(List<Allel> GenCode)
+        {
+            double product = 0;
+            foreach (var gen in GenCode)
+            {
+                if (product == 0) product = gen.DecimalValue;
+                else product *= gen.DecimalValue;
+            }
+            return product - 1;
         }
 
         #endregion

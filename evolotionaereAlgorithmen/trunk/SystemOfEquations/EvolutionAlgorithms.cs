@@ -32,7 +32,7 @@ public class EvolutionAlgorithms
         return kindGen;
     }
 
-    public static List<Tierchen> einPunktRekombination(Random randomizer, int recombinations, List<Tierchen> kindGen, List<Tierchen> elternGen)
+    public static List<Tierchen> NPunktRekombination(Random randomizer, int recombinations, int pointOfRecombination, List<Tierchen> kindGen, List<Tierchen> elternGen)
     {
         // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
         // Wiederhole solange bis die Anzahl der Rekombinationen erreicht
@@ -47,7 +47,7 @@ public class EvolutionAlgorithms
 
             Tierchen Kind1;
             Tierchen Kind2;
-            Tierchen.OnePointRecombination(elternGen[index1], elternGen[index2], out Kind1, out Kind2);
+            Tierchen.NPointRecombination(elternGen[index1], elternGen[index2], out Kind1, out Kind2, pointOfRecombination);
             kindGen.Add(Kind1);
             kindGen.Add(Kind2);
             kindGen = kindGen.Distinct(new TierchenComparer()).ToList();
