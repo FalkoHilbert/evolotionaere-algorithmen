@@ -13,7 +13,7 @@ namespace SystemOfEquations
 
         public Allel(int MaxLenght, Intervall interval )
         {
-            m_MaxLenght = MaxLenght;
+            m_MaxLenght = MaxLenght > 1023 ? 1023 : MaxLenght;
             m_interval = interval;
             BinärCode.Capacity = MaxLenght;
         }

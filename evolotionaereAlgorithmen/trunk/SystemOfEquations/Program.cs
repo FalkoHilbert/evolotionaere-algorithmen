@@ -125,6 +125,10 @@ namespace SystemOfEquations
                 //countOfRecombinations = 50;
                 Console.WriteLine("Anzahl Rekombinationen = {0}", countOfRecombinations);
                 couldParsed = false;
+
+                /*
+                 * Für N-Punkt-Rekombination die Anzahl der Rekombinationspunkte
+                 */ 
                 while (!couldParsed)
                 {
                     Console.WriteLine("Wie viele Rekombinationspunkte sollen verwendet werden?");
@@ -132,6 +136,11 @@ namespace SystemOfEquations
                     couldParsed = Int32.TryParse(lenght, out pointOfRecombination);
                 }
                 couldParsed = false;
+
+                /* 
+                * gibt die Anzahl der stellen innerhalb eines Allels an
+                * Bsp: Länge = 6 -> Gen: [001001] [011011] [010010]
+                */
                 if (!loadDocument)
                 {
                     while (!couldParsed)
@@ -140,10 +149,6 @@ namespace SystemOfEquations
                         string lenght = Console.ReadLine();
                         couldParsed = Int32.TryParse(lenght, out binärStringLenght);
                     }
-                    /* ### Was sagt die binäre Stringlänge aus? Ist das [000] [001] ... oder [000000000]? ###
-                     * !!! gibt die Anzahl der stellen innerhalb eines Allels an
-                     * !!! Bsp: Länge = 6 -> Gen: [001001] [011011] [010010]
-                     */
                     // binärStringLenght = 9;
                     // Console.WriteLine("Binärstringlänge = {0}", binärStringLenght);
                 }
@@ -366,12 +371,16 @@ namespace SystemOfEquations
                     }                    
 
 
-                    foreach (var tier in Elterngeneration)
+                    //foreach (var tier in Elterngeneration)
+                    //{
+                    //    Console.WriteLine("Tier: {0} | Wert:\t{1}", tier.ToString(), tier.Wert.ToString("####0.#####"));
+                    //}
+                    if (counter != 0 && (countOfGenerations / counter) % 10 == 0) 
                     {
-                        Console.WriteLine("Tier: {0} | Wert:\t{1}", tier.ToString(), tier.Wert.ToString("####0.#####"));
+                        Console.WriteLine("{0}% Verbleibend", countOfGenerations / counter);
+                       
                     }
                     counter++;
-
                     if (counter >= countOfGenerations)
                     {
                         // letzte Sicherung der Elterngeneration in die History
