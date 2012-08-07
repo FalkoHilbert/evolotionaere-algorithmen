@@ -9,9 +9,21 @@ namespace SystemOfEquations
     {
         public List<Allel> GenCode;
         public double Wert;
+        public Problem Problem;
 
         public Tierchen(List<Allel> genCode)
         {
+            if (genCode.Count != 0)
+            {
+                this.GenCode = genCode;
+                this.Bewerte();
+            }
+        }
+
+        public Tierchen(Problem problem, List<Allel> genCode)
+        {
+            // TODO: Complete member initialization
+            this.Problem = problem;
             if (genCode.Count != 0)
             {
                 this.GenCode = genCode;
@@ -38,7 +50,7 @@ namespace SystemOfEquations
                     Stelle2 = randomizer.Next(Stelle1 + 1, gencode.Count);
                 gencode.Reverse(Stelle1, Stelle2 - Stelle1);
                 // gesamtliste wieder trennen
-                var newTier =  new Tierchen(GenCode);
+                var newTier =  new Tierchen(this.Problem,GenCode);
                 newTier.CompleteGenCode = gencode;
                 return newTier;
             }
@@ -62,7 +74,7 @@ namespace SystemOfEquations
                 gencode[Stelle1] = gencode[Stelle2];
                 gencode[Stelle2] = tmpValue;
                 // gesamtliste wieder trennen
-                var newTier = new Tierchen(GenCode);
+                var newTier = new Tierchen(this.Problem, GenCode);
                 newTier.CompleteGenCode = gencode;
                 return newTier;
             }
@@ -73,38 +85,11 @@ namespace SystemOfEquations
 
         public double Bewerte()
         {
-            Wert = Math.Sqrt( Math.Pow(funktion1(), 2) + Math.Pow(funktion2(), 2) + Math.Pow(funktion3(), 2));
+            Wert = Problem.Löse(GenCode);
+            //Wert = Math.Sqrt( Math.Pow(funktion1(), 2) + Math.Pow(funktion2(), 2) + Math.Pow(funktion3(), 2));
             return Wert;
         }
 
-        private double funktion1()
-        {
-            return Math.Pow(GenCode[0].DecimalValue, 2) + 2 * Math.Pow(GenCode[1].DecimalValue, 2) - 4;
-        }
-        private double funktion2()
-        {
-            return Math.Pow(GenCode[0].DecimalValue, 2) + 2 * Math.Pow(GenCode[1].DecimalValue, 2) + GenCode[2].DecimalValue - 8;
-        }
-        private double funktion3()
-        {
-            return Math.Pow(GenCode[0].DecimalValue - 1, 2) + Math.Pow(2 * GenCode[1].DecimalValue - Math.Sqrt(2), 2) + Math.Pow(GenCode[2].DecimalValue - 5, 2) - 4;
-        }
-        /*
-         * Selektionen
-         * 
-         * 
-         */
-
-
-
-
-
-
-        /*
-         * Rekombinationen
-         * 
-         * 
-         */
 
         public static bool OnePointRecombination(Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2)
         {
@@ -138,9 +123,9 @@ namespace SystemOfEquations
                     genCodeKind1.AddRange(vater.CompleteGenCode.GetRange(splitIndex, GenCodeSize - splitIndex));
                     genCodeKind2.RemoveRange(splitIndex, GenCodeSize - splitIndex);
                     genCodeKind2.AddRange(mutter.CompleteGenCode.GetRange(splitIndex, GenCodeSize - splitIndex));
-                    kind1 = new Tierchen( mutter.GenCode);
+                    kind1 = new Tierchen(mutter.Problem, mutter.GenCode);
                     kind1.CompleteGenCode = genCodeKind1;
-                    kind2 = new Tierchen( vater.GenCode);
+                    kind2 = new Tierchen(vater.Problem, vater.GenCode);
                     kind2.CompleteGenCode = genCodeKind2;
                 }
             }
@@ -206,9 +191,9 @@ namespace SystemOfEquations
                             }
                             chooseFirstFromMother = !chooseFirstFromMother;
                         }
-                        kind1 = new Tierchen(mutter.GenCode);
+                        kind1 = new Tierchen(mutter.Problem, mutter.GenCode);
                         kind1.CompleteGenCode = genCodeKind1;
-                        kind2 = new Tierchen(vater.GenCode);
+                        kind2 = new Tierchen(vater.Problem, vater.GenCode);
                         kind2.CompleteGenCode = genCodeKind2;
                     }
                 }
@@ -216,7 +201,7 @@ namespace SystemOfEquations
             return false;
         }
 
-        public static Tierchen RandomTier(int AllelLenght, List<Intervall> interval, int GenLenght)
+        public static Tierchen RandomTier(int AllelLenght, List<Intervall> interval, int GenLenght, Problem problem)
         {
             // generate Gen
             Random randomizer = new Random();
@@ -233,7 +218,7 @@ namespace SystemOfEquations
                 allel.Add(allelVal);
                 genCode.Add(allel);
             }
-            var tier = new Tierchen(genCode);
+            var tier = new Tierchen(problem, genCode);
             tier.Bewerte();
             return tier;
         }
@@ -273,8 +258,7 @@ namespace SystemOfEquations
                     foreach (var bit in new List<Allel>(GenCode))
                     {
                         gencode.AddRange(bit.BinärCode);
- 
-                    }
+                     }
                     return gencode;
                 }
                 return GenCode.SelectMany(allel => allel.BinärCode.Select(x => x)).ToList();

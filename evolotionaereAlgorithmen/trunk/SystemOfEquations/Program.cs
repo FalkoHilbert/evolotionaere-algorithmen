@@ -12,7 +12,7 @@ namespace SystemOfEquations
         static List<Tierchen> Kindgeneration = new List<Tierchen>();
         static List<Tierchen> TierchenHistory = new List<Tierchen>();
 
-        static List<Intervall> intervall;
+        static List<Intervall> intervalle;
         static int binärStringLenght = 0;
         static int countOfRecombinations = 0;
         static int elternSize = 0;
@@ -22,6 +22,7 @@ namespace SystemOfEquations
         static bool restart = true;
         static int historySize = 10;
         static int countOfGenerations = 1;
+        static Problem problem = null;
 
         static void Main(string[] args)
         {
@@ -31,7 +32,7 @@ namespace SystemOfEquations
                 repeat = true;
                 Console.Clear();
                 TierchenHistory = new List<Tierchen>();
-                intervall = new List<Intervall>();
+                intervalle = new List<Intervall>();
 
                 bool couldParsed = false;
                 bool loadDocument = false;
@@ -54,6 +55,8 @@ namespace SystemOfEquations
                                 doc.Root.Descendants("tier").Select(tier =>
                                     // erzeuge für jedes ein Tierchen Object
                                     new Tierchen(
+                                        // lade Problem
+                                        new Problem(int.Parse(tier.Attribute("problemType").Value)),
                                         // lade innerhalb des "tier"-Elementes alle "gen"-Elemente
                                         tier.Descendants("gen").Select(gen =>
                                             // erzeuge für jedes ein Allel
@@ -83,6 +86,23 @@ namespace SystemOfEquations
                  */
                 if (!loadDocument)
                 {
+                    // Problem abfragen
+                    couldParsed = false;
+                    while (!couldParsed)
+                    {
+                        Console.WriteLine("Welches Problem soll gelöst werden?\r\n"
+                                        + "[1] lineares Gleichungssystem\r\n"
+                                        + "[2] Griewank-Funktion\r\n"
+                                        + "[3] Ackley-Funktion\r\n"
+                                        + "[4] C-Funktion");
+                        string lenght = Console.ReadLine();
+                        couldParsed = Problem.TryParse(lenght, out problem);
+                    }
+                }
+
+                if (!loadDocument)
+                {
+                    couldParsed = false;
                     while (!couldParsed)
                     {
                         Console.WriteLine("Größe der Elterngeneration?");
@@ -137,17 +157,39 @@ namespace SystemOfEquations
                 couldParsed = false;
                 if (!loadDocument)
                 {
-                    while (!couldParsed)
+                    Console.WriteLine("Möchten Sie verschiedene Intervalle für jedes Gen angeben? [y/n]");
+                    string input = Console.ReadLine();
+                    if (input == "y")
                     {
-                        Console.WriteLine("Größe des {0}. Intervals?", (intervall.Count() + 1));
-                        string lenght = Console.ReadLine();
-                        Intervall actInterval;
-                        couldParsed = Intervall.TryParse(lenght, out actInterval);
-                        if (couldParsed)
+                        while (!couldParsed)
                         {
-                            intervall.Add(actInterval);
-                            couldParsed = (intervall.Count() >= gene);
+                            Console.WriteLine("Größe des {0}. Intervals?", (intervalle.Count() + 1));
+                            string lenght = Console.ReadLine();
+                            Intervall actInterval;
+                            couldParsed = Intervall.TryParse(lenght, out actInterval);
+                            if (couldParsed)
+                            {
+                                intervalle.Add(actInterval);
+                                couldParsed = (intervalle.Count() >= gene);
+                            }
                         }
+                    }
+                    else
+                    {
+                        while (!couldParsed)
+                        {
+                            Console.WriteLine("Größe aller Intervalle?");
+                            string lenght = Console.ReadLine();
+                            Intervall actInterval;
+                            couldParsed = Intervall.TryParse(lenght, out actInterval);
+                            if (couldParsed)
+                            {
+                                while (intervalle.Count() < gene)
+                                {
+                                    intervalle.Add(actInterval);
+                                }                         
+                            }
+                        }                    
                     }
                     //Intervall actIntervall;
                     //couldParsed = Intervall.TryParse("3", out actIntervall);
@@ -162,8 +204,8 @@ namespace SystemOfEquations
                     // !!! lösung wäre entweder die toString Methode im Object zu deklarieren oder per hand den Start und das ende auszugeben
                     // !!! HINWEIS: die Methode TryParse in der Intervall Klasse versucht aus einem String wie: "[-1,1]" oder "-1,1" ein Intervall auszulesen 
                     //couldParsed = Intervall.TryParse("3,5", out actIntervall);
-                    //intervall.Add(actIntervall);                 
-                    Console.WriteLine("Intervalle = {0}", intervall);
+                    //intervall.Add(actIntervall);
+                    Console.WriteLine("Intervalle = {0}", String.Join(",", intervalle.Select(o => o.ToString()).ToArray()));
                 }
 
                 couldParsed = false;
@@ -194,7 +236,7 @@ namespace SystemOfEquations
                     // erzeuge Elterngeneration
                     while (Elterngeneration.Count < elternSize)
                     {
-                        Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, intervall, funktionCount));
+                        Elterngeneration.Add(Tierchen.RandomTier(binärStringLenght, intervalle, gene, problem));
                         /*
                          * ### Wie kommt das mit dem Distinct zustande ? ###
                          * ### Ist ToList() eine Methode einer über TierchenComparer liegenden Klasse ? ###
@@ -214,6 +256,10 @@ namespace SystemOfEquations
                                 Elterngeneration.Select(tier =>
                                     // erzeuge "tier"-Element
                                     new XElement("tier",
+                                        // erzeuge Problem-Attribute
+                                        new XAttribute("problemType",
+                                            (int)(tier.Problem.ProblemType)
+                                            ),
                                         // für jedes gen im tierchen
                                         tier.GenCode.Select(gen =>
                                             // erzeuge "gen"-Element
@@ -315,6 +361,7 @@ namespace SystemOfEquations
                     {
                         Console.WriteLine("Tier: {0} | Wert:\t{1}", tier.ToString(), tier.Wert.ToString("####0.#####"));
                     }
+                    counter++;
 
                     if (counter >= countOfGenerations)
                     {
@@ -358,7 +405,6 @@ namespace SystemOfEquations
                     else
                     {
                         repeat = true;
-                        counter++;
                     }
                 }
             }
