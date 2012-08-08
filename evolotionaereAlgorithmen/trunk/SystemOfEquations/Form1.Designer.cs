@@ -70,6 +70,9 @@
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -227,6 +230,8 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.label16);
+            this.groupBox2.Controls.Add(this.comboBox4);
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.numericUpDown2);
@@ -250,7 +255,7 @@
             this.groupBox2.Controls.Add(this.textBox7);
             this.groupBox2.Location = new System.Drawing.Point(12, 144);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(966, 129);
+            this.groupBox2.Size = new System.Drawing.Size(966, 139);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Einstellungen zur Evolution";
@@ -305,7 +310,7 @@
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(595, 76);
+            this.textBox9.Location = new System.Drawing.Point(446, 85);
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(100, 20);
             this.textBox9.TabIndex = 8;
@@ -313,7 +318,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(443, 79);
+            this.label10.Location = new System.Drawing.Point(443, 69);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(137, 13);
             this.label10.TabIndex = 19;
@@ -342,11 +347,10 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Enabled = false;
-            this.progressBar1.Location = new System.Drawing.Point(6, 98);
+            this.progressBar1.Location = new System.Drawing.Point(6, 108);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(954, 23);
             this.progressBar1.TabIndex = 6;
@@ -369,7 +373,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(6, 69);
+            this.button3.Location = new System.Drawing.Point(9, 81);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(206, 23);
             this.button3.TabIndex = 9;
@@ -413,17 +417,17 @@
             // 
             this.Ausgabe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.Ausgabe.Location = new System.Drawing.Point(12, 304);
+            this.Ausgabe.Location = new System.Drawing.Point(12, 315);
             this.Ausgabe.Multiline = true;
             this.Ausgabe.Name = "Ausgabe";
             this.Ausgabe.ReadOnly = true;
             this.Ausgabe.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Ausgabe.Size = new System.Drawing.Size(966, 212);
+            this.Ausgabe.Size = new System.Drawing.Size(966, 201);
             this.Ausgabe.TabIndex = 4;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(18, 275);
+            this.button4.Location = new System.Drawing.Point(18, 287);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(206, 23);
             this.button4.TabIndex = 2;
@@ -433,7 +437,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(246, 274);
+            this.button5.Location = new System.Drawing.Point(246, 286);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(206, 23);
             this.button5.TabIndex = 3;
@@ -444,7 +448,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(215, 73);
+            this.checkBox2.Location = new System.Drawing.Point(218, 85);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(140, 17);
             this.checkBox2.TabIndex = 7;
@@ -453,7 +457,7 @@
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(458, 277);
+            this.textBox8.Location = new System.Drawing.Point(458, 289);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(100, 20);
             this.textBox8.TabIndex = 5;
@@ -492,11 +496,47 @@
             this.label15.TabIndex = 30;
             this.label15.Text = "%";
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(708, 67);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(77, 13);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "Wahlverfahren";
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "[0] Zufällig",
+            "[1] deterministisch",
+            "[2] roulette",
+            "[3] fitnessproportionale,",
+            "[4] rangbasierte",
+            "[5] q_fachesTurnier",
+            "[6] q_stufigeZweifachesTurnier"});
+            this.comboBox4.Location = new System.Drawing.Point(710, 83);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(121, 21);
+            this.comboBox4.TabIndex = 31;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(722, 289);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(250, 23);
+            this.button6.TabIndex = 6;
+            this.button6.Text = "Anzeige leeren";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(990, 528);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.textBox8);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -504,7 +544,8 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Evolutionäre Algorithmen";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -560,6 +601,9 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.Button button6;
     }
 }
 

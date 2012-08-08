@@ -91,7 +91,7 @@ namespace SystemOfEquations
         }
 
 
-        public static bool OnePointRecombination(Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2)
+        public static bool OnePointRecombination(Random randomizer, Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2)
         {
             /* Ein-Punkt-Rekombination wählt zwei Tierchen sowie zufällig je ein Allel ihres Gens.
              * Kinder setzen sich aus einem Teil der Mutter/Vater sowie einem Teil des Vaters zusammen.
@@ -106,9 +106,6 @@ namespace SystemOfEquations
                 && mutter.CompleteGenCode.Count() == vater.CompleteGenCode.Count()
                 && mutter.CompleteGenCode.Count() > 0 )
             {
-                // wähle Zahl z
-                Random randomizer = new Random();
-
                 // Gib eine Folge von eindeutigen (unsortierten?) Allelen des jew. Tierchens aus
                 // mehrere Allele in einem Tierchen sind möglich - müssen aber extra berücksichtigt werden
                 var AllelSizeMutter = mutter.GenCode.Select(allel => allel.Size).Distinct();
@@ -132,7 +129,7 @@ namespace SystemOfEquations
             return false;
         }
 
-        public static bool NPointRecombination(Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2, int recombinationPoints = 1 )
+        public static bool NPointRecombination(Random randomizer, Tierchen mutter, Tierchen vater, out Tierchen kind1, out Tierchen kind2, int recombinationPoints = 1)
         {
             /* N-Punkt-Rekombination wählt zwei Tierchen sowie zufällig je n Allele ihres Gens.
              * Kinder setzen sich aus einem Teil der Mutter/Vater sowie einem Teil des Vaters zusammen.
@@ -149,8 +146,6 @@ namespace SystemOfEquations
                 && mutter.CompleteGenCode.Count() > 0)
             {
 
-                // wähle Zahl z
-                Random randomizer = new Random();
 
                 if (recombinationPoints <= mutter.CompleteGenCode.Count())
                 {
@@ -201,10 +196,8 @@ namespace SystemOfEquations
             return false;
         }
 
-        public static Tierchen RandomTier(int AllelLenght, List<Intervall> interval, int GenLenght, Problem problem)
+        public static Tierchen RandomTier(Random randomizer, int AllelLenght, List<Intervall> interval, int GenLenght, Problem problem)
         {
-            // generate Gen
-            Random randomizer = new Random();
             var genCode = new List<Allel>();
             for (int i = 0; i < GenLenght; i++)
             {

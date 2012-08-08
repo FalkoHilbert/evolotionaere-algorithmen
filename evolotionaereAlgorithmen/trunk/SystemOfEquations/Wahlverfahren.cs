@@ -2,6 +2,7 @@
 {
     public enum Wahlverfahren
     {
+        zufall = 0,
         determenistic = 1,
         roulette = 2,
         fitnessproportionale = 3,

@@ -9,6 +9,8 @@ public class EvolutionAlgorithms
 {
     #region Rekombination/Mutation
 
+    private static int MAX_VERSUCHE_ZUM_FINDEN_NICHT_DOPPELTEN = 10;
+
     public static List<Tierchen> mutiereKinder(Random randomizer, List<Tierchen> kindGen, List<Tierchen> elternGen, int countOfMutations)
     {
         while (kindGen.Count() < countOfMutations)
@@ -36,6 +38,9 @@ public class EvolutionAlgorithms
     {
         // Füge zur Kindgeneration zwei Kinder über eine Ein-Punkt-Rekombination hinzu
         // Wiederhole solange bis die Anzahl der Rekombinationen erreicht
+        bool verbieteDoppelte = true;
+        int lastCount = 0;
+        int versuchsZähler = 0;
         while (kindGen.Count() < recombinations)
         {
             var index1 = randomizer.Next(0, elternGen.Count);
@@ -47,10 +52,18 @@ public class EvolutionAlgorithms
 
             Tierchen Kind1;
             Tierchen Kind2;
-            Tierchen.NPointRecombination(elternGen[index1], elternGen[index2], out Kind1, out Kind2, pointOfRecombination);
+            Tierchen.NPointRecombination(randomizer, elternGen[index1], elternGen[index2], out Kind1, out Kind2, pointOfRecombination);
             kindGen.Add(Kind1);
             kindGen.Add(Kind2);
-            kindGen = kindGen.Distinct(new TierchenComparer()).ToList();
+            if (verbieteDoppelte)
+            {
+                kindGen = kindGen.Distinct(new TierchenComparer()).ToList();
+                if (kindGen.Count() == lastCount)
+                    if (versuchsZähler <= MAX_VERSUCHE_ZUM_FINDEN_NICHT_DOPPELTEN) versuchsZähler++;
+                    else verbieteDoppelte = false;
+                else versuchsZähler = 0;
+            }
+            lastCount = kindGen.Count();
         }
         return kindGen;
     }
@@ -58,9 +71,8 @@ public class EvolutionAlgorithms
     #endregion
     #region Selektionen
 
-    public static List<Tierchen> commaSelection(List<Tierchen> Kinder, Wahlverfahren wahl)
+    public static List<Tierchen> commaSelection(Random randomizer, List<Tierchen> Kinder, Wahlverfahren wahl)
     {
-        Random randomizer = new Random();
         var newEltern = new List<Tierchen>();
         int anzahlKinder = Kinder.Count;
         int anzahlNeueEltern = randomizer.Next(anzahlKinder / 7, anzahlKinder / 5);
@@ -69,7 +81,7 @@ public class EvolutionAlgorithms
         if (wahl == Wahlverfahren.determenistic //)
            || wahl == Wahlverfahren.roulette)
         {
-            //tmpKinder = tmpKinder.OrderBy(tier => tier.Wert).ToList();
+            tmpKinder = tmpKinder.OrderBy(tier => tier.Wert).ToList();
             //foreach (var tier in tmpKinder)
             //{
             //    newEltern.Add(tier);
@@ -79,17 +91,15 @@ public class EvolutionAlgorithms
         }
         //else
         //{
-            while (true)
+            while (anzahlNeueEltern > newEltern.Count)
             {
-                addChild(newEltern, tmpKinder, wahl);
-                if ( anzahlNeueEltern >= newEltern.Count)
-                    break;
+                addChild( randomizer, newEltern, tmpKinder, wahl);
             }
         //}
         return newEltern;
     }
 
-    public static List<Tierchen> plusSelection(List<Tierchen> Eltern, List<Tierchen> Kinder, Wahlverfahren wahl)
+    public static List<Tierchen> plusSelection(Random randomizer, List<Tierchen> Eltern, List<Tierchen> Kinder, Wahlverfahren wahl)
     {
         var newEltern = new List<Tierchen>();
         int anzahlKinder = Kinder.Count;
@@ -109,11 +119,9 @@ public class EvolutionAlgorithms
         }
         //else
         //{
-            while (true)
+            while (anzahlEltern > newEltern.Count)
             {
-                addChild(newEltern, tmpKinder, wahl);
-                if (newEltern.Count >= anzahlEltern)
-                    break;
+                addChild(randomizer, newEltern, tmpKinder, wahl);
             }
         //}
         return newEltern;
@@ -123,22 +131,35 @@ public class EvolutionAlgorithms
 
     #region Auswahlverfahren
 
-    private static void addChild(List<Tierchen> newEltern, List<Tierchen> tmpKinder, Wahlverfahren wahl)
+    private static void addChild(Random randomizer, List<Tierchen> newEltern, List<Tierchen> tmpKinder, Wahlverfahren wahl)
     {
         switch (wahl)
         {
+            case Wahlverfahren.zufall:
+                newEltern.Add(chooseChildRandom( randomizer, tmpKinder));
+                break;
             case Wahlverfahren.determenistic:
                 newEltern.Add(tmpKinder[newEltern.Count]);
                 break;
             case Wahlverfahren.roulette:
-                newEltern.Add(chooseChildRoulette(tmpKinder));
+                newEltern.Add(chooseChildRoulette( randomizer, tmpKinder));
                 break;
         }
     }
 
-    private static Tierchen chooseChildRoulette(List<Tierchen> tmpKinder)
+    private static Tierchen chooseChildRoulette(Random randomizer, List<Tierchen> tmpKinder)
     {
-        Random randomizer = new Random();
+        //var childs = tmpKinder.OrderBy(tier => tier.Wert ).ToList();
+        //Bestimme Zufallszahl z 2 [0; 1]
+        // Wahle Ai e P(t) genau dann, wenn
+        //summe(j=0, j<i, P(Aj) ) <= z < summe(j=0, j<=i, P(Aj) ) 
+        var childs = tmpKinder;
+        int index = randomizer.Next(0, childs.Count());
+        return childs[index];
+    }
+
+    private static Tierchen chooseChildRandom(Random randomizer, List<Tierchen> tmpKinder)
+    {
         //var childs = tmpKinder.OrderBy(tier => tier.Wert ).ToList();
         var childs = tmpKinder;
         int index = randomizer.Next(0, childs.Count());

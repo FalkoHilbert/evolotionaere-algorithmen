@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Allel.cs" />
+    <Compile Include="SelectionsStrategie.cs" />
     <Compile Include="IntervallComparer.cs" />
     <Compile Include="EvolutionAlgorithms.cs" />
     <Compile Include="Form1.cs">
