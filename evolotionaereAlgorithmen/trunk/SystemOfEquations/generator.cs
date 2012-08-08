@@ -22,7 +22,7 @@ namespace SystemOfEquations
             m_Problem = problem;
         }
 
-        public void generateNewGenerations(BackgroundWorker bgworker, MutationType mutationType, int mutationRateStart, int mutationRateEnd, int historySize, int countOfGenerations, int countOfChilds, int pointOfRecombination, int selectionsStrategie)
+        public void generateNewGenerations(BackgroundWorker bgworker, MutationType mutationType, int mutationRateStart, int mutationRateEnd, int historySize, int countOfGenerations, int countOfChilds, int pointOfRecombination, SelectionsStrategie selectionsStrategie, Wahlverfahren wahlverfahren)
         {
             bool repeat = true;
 
@@ -73,7 +73,7 @@ namespace SystemOfEquations
                     //var input = Console.ReadLine();
                     switch (selectionsStrategie)
                     {
-                        case 1:
+                        case SelectionsStrategie.keine:
                             //repeat2 = false;
                             //Lösche alle Eltern
                             Elterngeneration.Clear();
@@ -84,14 +84,29 @@ namespace SystemOfEquations
                             //Jetzt kann die Kindgeneration gelöscht werden
                             Kindgeneration.Clear();
                             break;
-                        case 2:
+                        case SelectionsStrategie.comma:
                             //repeat2 = false;
-                            EvolutionAlgorithms.commaSelection(Kindgeneration, Wahlverfahren.determenistic);
+                            var tmpList1 = EvolutionAlgorithms.commaSelection(randomizer, Kindgeneration, Wahlverfahren.determenistic);
+                            Elterngeneration.Clear();
+
+                            //Kindgeneration ist neue Elterngeneration
+                            Elterngeneration.AddRange(tmpList1);
+
+                            //Jetzt kann die Kindgeneration gelöscht werden
+                            Kindgeneration.Clear();
                             //KommaSelektion(randomizer);
                             break;
-                        case 3:         
+                        case SelectionsStrategie.plus:         
                             //repeat2 = false;
-                            EvolutionAlgorithms.plusSelection(Elterngeneration,Kindgeneration, Wahlverfahren.determenistic);
+                            var tmpList2 = EvolutionAlgorithms.plusSelection(randomizer, Elterngeneration, Kindgeneration, Wahlverfahren.determenistic);
+                            //Lösche alle Eltern
+                            Elterngeneration.Clear();
+
+                            //Kindgeneration ist neue Elterngeneration
+                            Elterngeneration.AddRange(tmpList2);
+
+                            //Jetzt kann die Kindgeneration gelöscht werden
+                            Kindgeneration.Clear();
                             //KommaSelektion(randomizer);
                             break;
                     }                  
@@ -104,7 +119,7 @@ namespace SystemOfEquations
                 */
 
                 counter++;
-                bgworker.ReportProgress((counter * 100 / countOfGenerations), counter);
+                bgworker.ReportProgress((counter * 100 / countOfGenerations), counter );
 
                 if (counter >= countOfGenerations)
                 {
