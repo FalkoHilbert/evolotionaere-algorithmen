@@ -68,52 +68,9 @@ namespace SystemOfEquations
                 Elterngeneration = Elterngeneration.Distinct(new TierchenComparer()).ToList();
                 progressBar1.Value = Elterngeneration.Count() * 100 / elternSize;
             }
+            SaveGeneration("last.xml");
             progressBar1.Enabled = false;
             m_Generator = new generator(Elterngeneration, Kindgeneration, TierchenHistory, problem); 
-            try
-            {
-                // Elterngeneration im Programm Verzeichnis unter dem Namen "last.xml" speichern
-                // xml-Dokument erzeugen
-                XDocument doc = new XDocument(
-                    // erzeuge des Wurzelelement "generation"
-                    new XElement("generation",
-                        // für jedes tier in der Generation
-                        Elterngeneration.Select(tier =>
-                            // erzeuge "tier"-Element
-                            new XElement("tier",
-                                // erzeuge Problem-Attribute
-                                new XAttribute("problemType",
-                                    (int)(tier.Problem.ProblemType)
-                                    ),
-                                // für jedes gen im tierchen
-                                tier.GenCode.Select(gen =>
-                                    // erzeuge "gen"-Element
-                                    new XElement("gen",
-                                        // füge "interval_start"-Attribut hinzu
-                                        new XAttribute("interval_start",
-                                            gen.Interval.start
-                                        ),
-                                        // füge "interval_end"-Attribut hinzu
-                                        new XAttribute("interval_end",
-                                            gen.Interval.end
-                                        ),
-                                        // für jedes allel (Bit) im Gen
-                                        gen.BinärCode.Select(allel =>
-                                            // speichere bool'schen Wert 
-                                            new XElement("allel",
-                                                allel.ToString()
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                );
-                // dokument speichern
-                doc.Save("last.xml");
-            }
-            catch (Exception) { }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -187,7 +144,7 @@ namespace SystemOfEquations
             Int32.TryParse(textBox7.Text, out rekombinationsPunkte);
             Int32.TryParse(textBox4.Text, out anzahlGenerationen);
             Int32.TryParse(textBox10.Text, out anzahlKinder);  
-            Int32.TryParse(textBox4.Text, out historySize);
+            Int32.TryParse(textBox9.Text, out historySize);
             Int32.TryParse(comboBox2.SelectedItem.ToString().Substring(1, 1), out selectionStrategie);
             Int32.TryParse(comboBox4.SelectedItem.ToString().Substring(1, 1), out wahlVerfahren);
             progressBar1.Enabled = true;
@@ -205,7 +162,7 @@ namespace SystemOfEquations
             progressBar1.Value = e.ProgressPercentage;
             if (checkBox2.Checked)
             {
-                var tmpList = Elterngeneration.ToList();
+                var tmpList = m_Generator.Elterngeneration.ToList();
                 lock (tmpList)
                 {
                     Ausgabe.Text += "\r\nGeneration: " + ((int)e.UserState).ToString() + "\r\n" + String.Join("\r\n", tmpList.Select(o => o.ToNicerString()).ToArray());
@@ -244,7 +201,11 @@ namespace SystemOfEquations
         {
             int besten = 0;
             Int32.TryParse(textBox8.Text, out besten);
-            Ausgabe.Text += "\r\nDie " + textBox8.Text + " besten Individuen:\r\n" + String.Join("\r\n", TierchenHistory.OrderBy(tier => tier.Wert).Take(besten).Select(o => o.ToNicerString()).ToArray());
+            var tmpList = m_Generator.TierchenHistory.ToList();
+            lock (tmpList)
+            {
+                Ausgabe.Text += "\r\nDie " + textBox8.Text + " besten Individuen:\r\n" + String.Join("\r\n", TierchenHistory.OrderBy(tier => tier.Wert).Take(besten).Select(o => o.ToNicerString()).ToArray());
+            }
             Ausgabe.SelectionStart = Ausgabe.Text.Length;
             Ausgabe.ScrollToCaret();
             Ausgabe.Refresh();
@@ -255,6 +216,9 @@ namespace SystemOfEquations
         {
             progressBar1.Enabled = false;
             progressBar1.Value = 0;
+            Elterngeneration = m_Generator.Elterngeneration;
+            Kindgeneration = m_Generator.Kindgeneration;
+            TierchenHistory = m_Generator.TierchenHistory;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -268,6 +232,61 @@ namespace SystemOfEquations
         private void button6_Click(object sender, EventArgs e)
         {
             Ausgabe.Text = "";
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+            SaveGeneration(saveFileDialog1.FileName);
+
+        }
+
+        private void SaveGeneration(string FileName)
+        {
+            try
+            {
+                // Elterngeneration im Programm Verzeichnis unter dem Namen "last.xml" speichern
+                // xml-Dokument erzeugen
+                XDocument doc = new XDocument(
+                    // erzeuge des Wurzelelement "generation"
+                    new XElement("generation",
+                    // für jedes tier in der Generation
+                        Elterngeneration.Select(tier =>
+                            // erzeuge "tier"-Element
+                            new XElement("tier",
+                                // erzeuge Problem-Attribute
+                                new XAttribute("problemType",
+                                    (int)(tier.Problem.ProblemType)
+                                    ),
+                                // für jedes gen im tierchen
+                                tier.GenCode.Select(gen =>
+                                    // erzeuge "gen"-Element
+                                    new XElement("gen",
+                                        // füge "interval_start"-Attribut hinzu
+                                        new XAttribute("interval_start",
+                                            gen.Interval.start
+                                        ),
+                                        // füge "interval_end"-Attribut hinzu
+                                        new XAttribute("interval_end",
+                                            gen.Interval.end
+                                        ),
+                                        // für jedes allel (Bit) im Gen
+                                        gen.BinärCode.Select(allel =>
+                                            // speichere bool'schen Wert 
+                                            new XElement("allel",
+                                                allel.ToString()
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+                // dokument speichern
+                doc.Save(FileName);
+            }
+            catch (Exception) { } 
         }
     }
 }

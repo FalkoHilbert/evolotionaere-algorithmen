@@ -73,6 +73,8 @@
             this.label16 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -90,6 +92,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button7);
             this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.label9);
@@ -154,9 +157,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(324, 97);
+            this.button2.Location = new System.Drawing.Point(441, 97);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(295, 23);
+            this.button2.Size = new System.Drawing.Size(178, 23);
             this.button2.TabIndex = 7;
             this.button2.Text = "Elterngeneration erzeugen";
             this.button2.UseVisualStyleBackColor = true;
@@ -207,9 +210,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 97);
+            this.button1.Location = new System.Drawing.Point(218, 97);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(206, 23);
+            this.button1.Size = new System.Drawing.Size(217, 23);
             this.button1.TabIndex = 6;
             this.button1.Text = "Generation aus Datei laden";
             this.button1.UseVisualStyleBackColor = true;
@@ -531,6 +534,16 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(6, 97);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(206, 23);
+            this.button7.TabIndex = 12;
+            this.button7.Text = "Generation in Datei speichern";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -604,6 +617,8 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

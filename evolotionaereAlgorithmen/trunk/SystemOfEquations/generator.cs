@@ -9,9 +9,9 @@ namespace SystemOfEquations
 {
     class generator
     {
-        private List<Tierchen> Elterngeneration = new List<Tierchen>();
-        private List<Tierchen> Kindgeneration = new List<Tierchen>();
-        private List<Tierchen> TierchenHistory = new List<Tierchen>();
+        public List<Tierchen> Elterngeneration = new List<Tierchen>();
+        public List<Tierchen> Kindgeneration = new List<Tierchen>();
+        public List<Tierchen> TierchenHistory = new List<Tierchen>();
         private Problem m_Problem = null;
 
         public generator (List<Tierchen> Eltern, List<Tierchen> Kinder, List<Tierchen> History, Problem problem )
