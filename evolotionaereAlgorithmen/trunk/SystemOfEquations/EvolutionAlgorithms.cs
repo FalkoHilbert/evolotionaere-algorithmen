@@ -150,6 +150,24 @@ public class EvolutionAlgorithms
     public static Double getSelectionPressure(IList<Tierchen> Population)
     {
         return 0.0;
-    }    
+    }
+
+    public static int CalculateMutations(MutationType mutationType, int mutationRateStart, int mutationRateEnd, int countOfChilds, int generationCount, int generation)
+    {
+        int initialMutationsByRate = countOfChilds * mutationRateStart / 100;
+        int endMutationsByRate = countOfChilds * mutationRateEnd / 100;
+        switch (mutationType)
+        {
+            case MutationType.konstant:
+                return initialMutationsByRate;
+            case MutationType.linear:
+                return initialMutationsByRate + ((endMutationsByRate - initialMutationsByRate) / generationCount) * generation;
+            case MutationType.exponentiel:
+                return (int)(initialMutationsByRate * Math.Exp(Math.Log(endMutationsByRate/initialMutationsByRate) ) * generation);
+            case MutationType.potenziert:
+                return 0;
+        }
+        return initialMutationsByRate;
+    }
 }
 }
