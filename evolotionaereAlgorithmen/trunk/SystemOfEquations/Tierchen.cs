@@ -232,9 +232,9 @@ namespace SystemOfEquations
             var text = "";
             foreach (var gen in GenCode)
             {
-                text += gen.DecimalValue.ToString("0.000") + "; ";
+                text += gen.DecimalValue.ToString("0.000") + ", ";
             }
-            text = text.Substring(0, text.Length - 2) + ";" + Wert.ToString("####0.#####");
+            text = "(" + text.Substring(0, text.Length - 2) + ") | Wert:\t" + Wert.ToString("####0.#####");
             return text;
         }
 
@@ -275,6 +275,17 @@ namespace SystemOfEquations
                     this.Bewerte();
                 }
             }
+        }
+        
+        public string ToCSVString()
+        {
+            var text = "";
+            foreach (var gen in GenCode)
+            {
+                text += gen.DecimalValue.ToString("0.000") + "; ";
+            }
+            text = text.Substring(0, text.Length - 2) + ";" + Wert.ToString("####0.#####");
+            return text;
         }
     }
 }
