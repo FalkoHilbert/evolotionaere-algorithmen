@@ -351,16 +351,30 @@ namespace SystemOfEquations
 
         private void button12_Click(object sender, EventArgs e)
         {
-            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness", BesteFitness }, { "Verlauf der durchschnittlichen Fitness", DurchschnittsFitness }, { "Verlauf der besten Fitness der History", BesterDerHistoryFitness } });
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness", BesteFitness }, { "Verlauf der durchschnittlichen Fitness", DurchschnittsFitness }, { "Verlauf der besten Fitness in der History", BesterDerHistoryFitness } });
             verlauf.ShowDialog();
 
         }
 
         private void button13_Click(object sender, EventArgs e)
         {
-            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness der History", BesterDerHistoryFitness } });
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness in der History", BesterDerHistoryFitness } });
             verlauf.ShowDialog();
 
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            Ausgabe.Text += "\r\nVerlauf der besten Fitness in der History:\r\n";
+            int generation = 1;
+            foreach (var fitness in BesterDerHistoryFitness)
+            {
+                Ausgabe.Text += String.Format("[{0}] {1}\r\n", generation, fitness.ToString("####0.#####"));
+                generation++;
+            }
+            Ausgabe.SelectionStart = Ausgabe.Text.Length;
+            Ausgabe.ScrollToCaret();
+            Ausgabe.Refresh();
         }
     }
 }
