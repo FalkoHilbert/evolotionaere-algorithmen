@@ -77,5 +77,11 @@ namespace SystemOfEquations
             // Draw a line of text, followed by the chart, and then another line of text 
             chart1.Printing.PrintPaint(e.Graphics, myRec);
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+            chart1.SaveImage(saveFileDialog1.FileName, ChartImageFormat.Png);
+        }
     }
 }
