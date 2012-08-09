@@ -144,6 +144,12 @@ public class EvolutionAlgorithms
             case Wahlverfahren.roulette:
                 newEltern.Add(chooseChildRoulette( randomizer, tmpKinder));
                 break;
+            case Wahlverfahren.q_fachesTurnier:
+                newEltern.Add(chooseChildq_fachesTurnier(randomizer, tmpKinder));
+                break;
+            default:
+                newEltern.Add(chooseChildRandom(randomizer, tmpKinder));
+                break;
         }
     }
 
@@ -168,10 +174,14 @@ public class EvolutionAlgorithms
 
     private static Tierchen chooseChildq_fachesTurnier(Random randomizer, List<Tierchen> tmpKinder)
     {
-        //var childs = tmpKinder.OrderBy(tier => tier.Wert ).ToList();
-        var childs = tmpKinder;
-        int index = randomizer.Next(0, childs.Count());
-        return childs[index];
+        // wähle zufälig 2 unterschiedliche
+        var index1 = randomizer.Next(0, tmpKinder.Count());
+        var index2 = index1;
+        while (index2 == index1)
+        {
+            index2 = randomizer.Next(0, tmpKinder.Count());
+        }
+        return tmpKinder[index1].Wert <= tmpKinder[index2].Wert ? tmpKinder[index1] : tmpKinder[index2];
     }
     #endregion
 
