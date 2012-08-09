@@ -41,7 +41,8 @@ namespace SystemOfEquations
             problem = new Problem(Int32.Parse(comboBox1.SelectedItem.ToString().Substring(1,1)));
 
             var matches = Regex.Matches(textBox2.Text, @"\[(.*?)\]");
-
+            
+            intervalle.Clear();
             foreach (Match m in matches) {
                 Intervall intervall;
                 Intervall.TryParse(m.Groups[1].Value,out intervall);

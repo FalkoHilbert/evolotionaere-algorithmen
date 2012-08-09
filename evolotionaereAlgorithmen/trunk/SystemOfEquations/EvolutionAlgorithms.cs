@@ -166,6 +166,13 @@ public class EvolutionAlgorithms
         return childs[index];
     }
 
+    private static Tierchen chooseChildq_fachesTurnier(Random randomizer, List<Tierchen> tmpKinder)
+    {
+        //var childs = tmpKinder.OrderBy(tier => tier.Wert ).ToList();
+        var childs = tmpKinder;
+        int index = randomizer.Next(0, childs.Count());
+        return childs[index];
+    }
     #endregion
 
     public static Double getSelectionPressure(IList<Tierchen> Population)
