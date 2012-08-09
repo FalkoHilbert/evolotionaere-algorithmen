@@ -35,7 +35,12 @@ namespace SystemOfEquations
         private void button2_Click(object sender, EventArgs e)
         {
             Random randomizer = new Random();
-            Elterngeneration = new List<Tierchen>();
+            Elterngeneration.Clear();
+            Kindgeneration.Clear();
+            TierchenHistory.Clear(); 
+            BesteFitness.Clear(); 
+            DurchschnittsFitness.Clear();
+            BesterDerHistoryFitness.Clear();
             // erzeuge Elterngeneration
             
             Int32.TryParse(textBox1.Text, out elternSize);
@@ -340,14 +345,14 @@ namespace SystemOfEquations
 
         private void button12_Click(object sender, EventArgs e)
         {
-            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness", BesteFitness }, { "Verlauf der durchschnittlichen Fitness", DurchschnittsFitness }, { "Verlauf der Besten der History", BesterDerHistoryFitness } });
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness", BesteFitness }, { "Verlauf der durchschnittlichen Fitness", DurchschnittsFitness }, { "Verlauf der besten Fitness der History", BesterDerHistoryFitness } });
             verlauf.ShowDialog();
 
         }
 
         private void button13_Click(object sender, EventArgs e)
         {
-            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der Besten der History", BesterDerHistoryFitness } });
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness der History", BesterDerHistoryFitness } });
             verlauf.ShowDialog();
 
         }

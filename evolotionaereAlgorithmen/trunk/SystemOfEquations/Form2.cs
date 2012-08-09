@@ -51,10 +51,12 @@ namespace SystemOfEquations
                     var serie = new Series(entry.Key);
                     serie.ChartType = SeriesChartType.Spline;
                     serie.XValueMember = "Generation";
-                    serie.YValueMembers = "Fitnesswert" + seriesNumber;
+                    serie.YValueMembers = "Fitnesswert" + seriesNumber;                    
                     chart1.Series.Add(serie);
                     seriesNumber++;
                 }
+                chart1.ChartAreas[0].AxisX.Title = "Generation";
+                chart1.ChartAreas[0].AxisY.Title = "Fitnesswert";
                 chart1.DataSource = table;
                 chart1.DataBind();
             }
