@@ -425,8 +425,9 @@
             // 
             // Ausgabe
             // 
-            this.Ausgabe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.Ausgabe.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Ausgabe.Location = new System.Drawing.Point(12, 341);
             this.Ausgabe.Multiline = true;
             this.Ausgabe.Name = "Ausgabe";
