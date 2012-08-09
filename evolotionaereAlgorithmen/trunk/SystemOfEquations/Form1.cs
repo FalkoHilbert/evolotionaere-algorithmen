@@ -221,13 +221,7 @@ namespace SystemOfEquations
             {
                 //Ausgabe.Text += "\r\nDie " + textBox8.Text + " besten Individuen:\r\n" + String.Join("\r\n", TierchenHistory.OrderBy(tier => tier.Wert).Take(besten).Select(o => o.ToNicerString()).ToArray());
                 Ausgabe.Text += "\r\nDie " + textBox8.Text + " besten Individuen:\r\n";
-                int counter = 1;
-                foreach(var gen in TierchenHistory.FirstOrDefault().GenCode )
-                {
-                    Ausgabe.Text += "Gen"+counter.ToString() + ";";
-                    counter++;
-                }
-                Ausgabe.Text += "Wert\r\n" + String.Join("\r\n", TierchenHistory.OrderBy(tier => tier.Wert).Take(besten).Select(o => o.ToNicerString()).ToArray());
+                Ausgabe.Text += String.Join("\r\n", TierchenHistory.OrderBy(tier => tier.Wert).Take(besten).Select(o => o.ToNicerString()).ToArray());
             }
             Ausgabe.SelectionStart = Ausgabe.Text.Length;
             Ausgabe.ScrollToCaret();
@@ -317,11 +311,11 @@ namespace SystemOfEquations
 
         private void button8_Click(object sender, EventArgs e)
         {
-            Ausgabe.Text += "\r\nVerlauf der besten Fitness:\r\nGeneration;Fitness\r\n";
+            Ausgabe.Text += "\r\nVerlauf der besten Fitness:\r\n";
             int generation = 1;
             foreach (var fitness in BesteFitness)
             {
-                Ausgabe.Text += String.Format("[{0}]; {1}\r\n", generation, fitness.ToString("####0.#####"));
+                Ausgabe.Text += String.Format("[{0}]: {1}\r\n", generation, fitness.ToString("####0.#####"));
                 generation++;
             }
             Ausgabe.SelectionStart = Ausgabe.Text.Length;
@@ -331,11 +325,11 @@ namespace SystemOfEquations
 
         private void button9_Click(object sender, EventArgs e)
         {
-            Ausgabe.Text += "\r\nVerlauf der durchschnittlichen Fitness:\r\nGeneration;Fitness\r\n";
+            Ausgabe.Text += "\r\nVerlauf der durchschnittlichen Fitness:\r\n";
             int generation = 1;
             foreach (var fitness in DurchschnittsFitness)
             {
-                Ausgabe.Text += String.Format("[{0}]; {1}\r\n", generation, fitness.ToString("####0.#####"));
+                Ausgabe.Text += String.Format("[{0}]: {1}\r\n", generation, fitness.ToString("####0.#####"));
                 generation++;
             }
             Ausgabe.SelectionStart = Ausgabe.Text.Length;
@@ -373,16 +367,86 @@ namespace SystemOfEquations
 
         private void button14_Click(object sender, EventArgs e)
         {
-            Ausgabe.Text += "\r\nVerlauf der besten Fitness in der History:\r\nGeneration;Fitness\r\n";
+            Ausgabe.Text += "\r\nVerlauf der besten Fitness in der History:\r\n";
             int generation = 1;
             foreach (var fitness in BesterDerHistoryFitness)
             {
-                Ausgabe.Text += String.Format("[{0}]; {1}\r\n", generation, fitness.ToString("####0.#####"));
+                Ausgabe.Text += String.Format("[{0}]: {1}\r\n", generation, fitness.ToString("####0.#####"));
                 generation++;
             }
             Ausgabe.SelectionStart = Ausgabe.Text.Length;
             Ausgabe.ScrollToCaret();
             Ausgabe.Refresh();
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var ausgabeText = "";
+                int besten = 0;
+                Int32.TryParse(textBox8.Text, out besten);
+                var tmpList = m_Generator.TierchenHistory.ToList();
+                lock (tmpList)
+                {
+                    int counter = 1;
+                    foreach (var gen in TierchenHistory.FirstOrDefault().GenCode)
+                    {
+                        ausgabeText += "Gen" + counter.ToString() + ";";
+                        counter++;
+                    }
+                    ausgabeText += "Wert\r\n" + String.Join("\r\n", TierchenHistory.OrderBy(tier => tier.Wert).Take(besten).Select(o => o.ToCSVString()).ToArray());
+                }
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, ausgabeText);
+            }
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var ausgabeText = "Generation;Fitness\r\n";
+                int generation = 1;
+                foreach (var fitness in DurchschnittsFitness)
+                {
+                    ausgabeText += String.Format("[{0}]; {1}\r\n", generation, fitness.ToString("####0.#####"));
+                    generation++;
+                }
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, ausgabeText);
+            }
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var ausgabeText = "Generation;Fitness\r\n";
+                int generation = 1;
+                foreach (var fitness in BesteFitness)
+                {
+                    ausgabeText += String.Format("[{0}]; {1}\r\n", generation, fitness.ToString("####0.#####"));
+                    generation++;
+                }
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, ausgabeText);
+            }
+
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var ausgabeText = "Generation;Fitness\r\n";
+                int generation = 1;
+                foreach (var fitness in BesterDerHistoryFitness)
+                {
+                    ausgabeText += String.Format("[{0}]; {1}\r\n", generation, fitness.ToString("####0.#####"));
+                    generation++;
+                }
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, ausgabeText);
+            }
+
+
         }
     }
 }
