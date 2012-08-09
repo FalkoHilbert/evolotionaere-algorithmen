@@ -12,13 +12,19 @@ namespace SystemOfEquations
         public List<Tierchen> Elterngeneration = new List<Tierchen>();
         public List<Tierchen> Kindgeneration = new List<Tierchen>();
         public List<Tierchen> TierchenHistory = new List<Tierchen>();
+        public List<double> BesteFitness = new List<double>();
+        public List<double> DurchschnittsFitness = new List<double>();
+        public List<double> BesterDerHistoryFitness = new List<double>();
         private Problem m_Problem = null;
 
-        public generator (List<Tierchen> Eltern, List<Tierchen> Kinder, List<Tierchen> History, Problem problem )
+        public generator(List<Tierchen> Eltern, List<Tierchen> Kinder, List<Tierchen> History, Problem problem, List<double> beste, List<double> durchschnitt, List<double> historyBest)
         {
             Elterngeneration = Eltern;
             Kindgeneration = Kinder;
             TierchenHistory = History;
+            BesteFitness = beste;
+            DurchschnittsFitness = durchschnitt;
+            BesterDerHistoryFitness = historyBest;
             m_Problem = problem;
         }
 
@@ -41,13 +47,17 @@ namespace SystemOfEquations
             int counter = 0;
             while (repeat )
             {
+                BesteFitness.Add(Elterngeneration.OrderBy(tier => tier.Wert).Select(tier => tier.Wert).FirstOrDefault());
+                DurchschnittsFitness.Add(Elterngeneration.Sum(tier => tier.Wert) / Elterngeneration.Count());
+
                 repeat = false;
                 // Sichere die aktuelle Elterngeneration in die History
                 TierchenHistory.AddRange(Elterngeneration);
 
                 //Eliminiere die Doppelten
                 TierchenHistory = TierchenHistory.Distinct(new TierchenComparer()).OrderBy(tier => tier.Wert).Take(historySize).ToList();
-                    
+                BesterDerHistoryFitness.Add(TierchenHistory.Select(tier => tier.Wert).FirstOrDefault());
+    
                 Kindgeneration = new List<Tierchen>();
 
                 int countOfMutations = EvolutionAlgorithms.CalculateMutations(mutationType, mutationRateStart, mutationRateEnd, countOfChilds, countOfGenerations, counter);
@@ -123,6 +133,9 @@ namespace SystemOfEquations
 
                 if (counter >= countOfGenerations)
                 {
+                    BesteFitness.Add(Elterngeneration.OrderBy(tier => tier.Wert).Select(tier => tier.Wert).FirstOrDefault());
+                    DurchschnittsFitness.Add(Elterngeneration.Sum(tier => tier.Wert) / Elterngeneration.Count());
+
                     // letzte Sicherung der Elterngeneration in die History
                     TierchenHistory.AddRange(Elterngeneration);
 
