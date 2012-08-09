@@ -16,6 +16,9 @@ namespace SystemOfEquations
         private List<Tierchen> Elterngeneration = new List<Tierchen>();
         private List<Tierchen> Kindgeneration = new List<Tierchen>();
         private List<Tierchen> TierchenHistory = new List<Tierchen>();
+        private List<double> BesteFitness = new List<double>();
+        private List<double> DurchschnittsFitness = new List<double>();
+        private List<double> BesterDerHistoryFitness = new List<double>();
         private int elternSize = 0;
         private int binärStringLenght = 0;
         private int gene = 0;
@@ -71,7 +74,7 @@ namespace SystemOfEquations
             }
             SaveGeneration("last.xml");
             progressBar1.Enabled = false;
-            m_Generator = new generator(Elterngeneration, Kindgeneration, TierchenHistory, problem); 
+            m_Generator = new generator(Elterngeneration, Kindgeneration, TierchenHistory, problem, BesteFitness, DurchschnittsFitness, BesterDerHistoryFitness); 
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -122,7 +125,7 @@ namespace SystemOfEquations
                         comboBox1.SelectedIndex = index;
                     index++;
                 }
-                m_Generator = new generator(Elterngeneration, Kindgeneration, TierchenHistory, problem);
+                m_Generator = new generator(Elterngeneration, Kindgeneration, TierchenHistory, problem, BesteFitness, DurchschnittsFitness, BesterDerHistoryFitness);
 
             }
             catch (Exception) { loadDocument = false; }
@@ -130,7 +133,7 @@ namespace SystemOfEquations
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (m_Generator == null) m_Generator = new generator(Elterngeneration, Kindgeneration, TierchenHistory, problem);
+            if (m_Generator == null) m_Generator = new generator(Elterngeneration, Kindgeneration, TierchenHistory, problem, BesteFitness, DurchschnittsFitness, BesterDerHistoryFitness);
             int mutationType = 0;
             int mutationRateStart = (int)numericUpDown1.Value;
             int mutationRateEnd = (int)numericUpDown2.Value;
@@ -220,6 +223,9 @@ namespace SystemOfEquations
             Elterngeneration = m_Generator.Elterngeneration;
             Kindgeneration = m_Generator.Kindgeneration;
             TierchenHistory = m_Generator.TierchenHistory;
+            BesteFitness = m_Generator.BesteFitness;
+            DurchschnittsFitness = m_Generator.DurchschnittsFitness;
+            BesterDerHistoryFitness = m_Generator.BesterDerHistoryFitness;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -288,6 +294,62 @@ namespace SystemOfEquations
                 doc.Save(FileName);
             }
             catch (Exception) { } 
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Ausgabe.Text += "\r\nVerlauf der besten Fitness:\r\n";
+            int generation = 1;
+            foreach (var fitness in BesteFitness)
+            {
+                Ausgabe.Text += String.Format("[{0}] {1}\r\n", generation, fitness.ToString("####0.#####"));
+                generation++;
+            }
+            Ausgabe.SelectionStart = Ausgabe.Text.Length;
+            Ausgabe.ScrollToCaret();
+            Ausgabe.Refresh();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Ausgabe.Text += "\r\nVerlauf der durchschnittlichen Fitness:\r\n";
+            int generation = 1;
+            foreach (var fitness in DurchschnittsFitness)
+            {
+                Ausgabe.Text += String.Format("[{0}] {1}\r\n", generation, fitness.ToString("####0.#####"));
+                generation++;
+            }
+            Ausgabe.SelectionStart = Ausgabe.Text.Length;
+            Ausgabe.ScrollToCaret();
+            Ausgabe.Refresh();
+
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness", BesteFitness } });
+            verlauf.ShowDialog();
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der durchschnittlichen Fitness", DurchschnittsFitness } });
+            verlauf.ShowDialog();
+
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der besten Fitness", BesteFitness }, { "Verlauf der durchschnittlichen Fitness", DurchschnittsFitness }, { "Verlauf der Besten der History", BesterDerHistoryFitness } });
+            verlauf.ShowDialog();
+
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            Form2 verlauf = new Form2(new Dictionary<string, List<double>>() { { "Verlauf der Besten der History", BesterDerHistoryFitness } });
+            verlauf.ShowDialog();
+
         }
     }
 }
