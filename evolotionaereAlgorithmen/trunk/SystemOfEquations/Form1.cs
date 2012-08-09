@@ -85,6 +85,12 @@ namespace SystemOfEquations
         private void button1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
+            Elterngeneration.Clear();
+            Kindgeneration.Clear();
+            TierchenHistory.Clear();
+            BesteFitness.Clear();
+            DurchschnittsFitness.Clear();
+            BesterDerHistoryFitness.Clear();
             loadDocument = true;
             try
             {

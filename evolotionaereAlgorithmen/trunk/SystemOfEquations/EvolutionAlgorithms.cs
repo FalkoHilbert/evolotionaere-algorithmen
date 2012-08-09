@@ -201,8 +201,8 @@ public class EvolutionAlgorithms
             case MutationType.linear:
                 return initialMutationsByRate + ((endMutationsByRate - initialMutationsByRate) / generationCount) * generation;
             case MutationType.exponentiel:
-                return (int)(initialMutationsByRate * Math.Exp(Math.Log(endMutationsByRate/initialMutationsByRate) ) * generation);
-            case MutationType.potenziert:
+                return (int)(initialMutationsByRate * Math.Pow((endMutationsByRate/initialMutationsByRate),(generation/generationCount));
+            default:
                 return 0;
         }
         return initialMutationsByRate;
