@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelSalesman", "TravelSal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemOfEquations", "SystemOfEquations\SystemOfEquations.csproj", "{5F15C01F-5C64-49BB-A871-94BE89D95013}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{067481F6-F976-456B-AC1D-56DAD2D97810}"
+	ProjectSection(SolutionItems) = preProject
+		Szenarien.xlsx = Szenarien.xlsx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
